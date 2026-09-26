@@ -1109,6 +1109,11 @@ function renderDossierQSVMPanel(qsvm) {
     if (feat60) feat60.textContent = feats.late_60_89_count ?? 0;
     if (feat90) feat90.textContent = feats.late_90_count ?? 0;
 
+    const foirElem = document.getElementById("dossier-foir-pct");
+    if (foirElem && feats.debt_to_income_pct !== undefined) {
+        foirElem.textContent = `${feats.debt_to_income_pct}% DTI (${feats.debt_to_income_pct <= 50 ? 'Safe' : 'Elevated'}) • Surplus: ₹${(feats.monthly_disposable_surplus || 0).toLocaleString('en-IN')}`;
+    }
+
     if (recBox) {
         const color = qsvm.recommendation_color || (isClass0 ? "emerald" : "rose");
         recBox.className = `qsvm-recommendation-banner rec-${color}`;

@@ -538,51 +538,144 @@ def execute_background_qsvm_underwriting(utilization_pct: float, late_30: int, l
 def evaluate_qsvm_for_application(app_data: Dict[str, Any]) -> Dict[str, Any]:
     """
     Performs full institutional Quantum Kernel QSVM evaluation for an application dossier.
-    Computes kernel margin, Hilbert space classification, confidence, and eligibility recommendation.
+    Synthesizes 8 multi-dimensional borrower parameters:
+      1. Quantum Delinquency Vector (revolving utilization, 30/60/90 DPD, NPA status)
+      2. Debt-to-Income / FOIR Cashflow Leverage (existing EMIs + proposed EMI vs monthly income)
+      3. Loan-to-Income (LTI) Exposure Multiplier (requested principal vs annual income)
+      4. Net Monthly Disposable Cashflow Surplus
+      5. Career Longevity & Active Working Runway (age + tenor vs sector statutory superannuation)
+      6. Pension & Post-Retirement Cashflow Guarantees
+      7. Credit Bureau Reputation (CIBIL Score Calibration)
+      8. Repayment Discipline Track Record (settled loans without default)
     """
     portfolio = app_data.get("portfolio", {})
     applicant = app_data.get("applicant", {})
     loan_req = app_data.get("loan_request", {})
     ret_analysis = app_data.get("retirement_analysis", {})
 
+    # 1. Delinquency Quantum State
     utilization_pct = float(portfolio.get("revolving_utilization_pct", 0.0))
     late_30 = int(portfolio.get("late_30_59_count", 0))
     late_60 = int(portfolio.get("late_60_89_count", 0))
     late_90 = int(portfolio.get("late_90_count", 0))
+    has_npa = bool(portfolio.get("has_npa", False) or late_90 > 0)
 
+    # 2. Financial Cashflow & Debt Burden Analysis
+    monthly_income = float(applicant.get("monthly_income") or loan_req.get("monthly_income", 50000.0))
+    existing_emi = float(portfolio.get("total_monthly_emi", 0.0))
+    req_amount = float(loan_req.get("amount_requested", 500000.0))
+    tenor_months = int(loan_req.get("tenor_months", 36))
+    req_emi = float(loan_req.get("requested_emi", 0.0))
+    if req_emi <= 0:
+        req_emi = calculate_monthly_emi(req_amount, 10.75, tenor_months)
+
+    total_monthly_obligations = existing_emi + req_emi
+    exact_dti_pct = round((total_monthly_obligations / max(1000.0, monthly_income)) * 100.0, 1)
+    annual_income = max(12000.0, monthly_income * 12.0)
+    lti_multiplier = round(req_amount / annual_income, 2)
+    net_monthly_surplus = round(monthly_income - total_monthly_obligations, 0)
+
+    # 3. Career Longevity & Superannuation Runway
+    applicant_age = int(applicant.get("applicant_age", 35))
+    statutory_ret_age = int(ret_analysis.get("statutory_retirement_age", 58))
+    age_at_maturity = float(ret_analysis.get("age_at_maturity", round(applicant_age + tenor_months / 12.0, 1)))
+    maturity_exceeds = bool(ret_analysis.get("maturity_exceeds_retirement", age_at_maturity > statutory_ret_age))
+    pension_eligible = bool(ret_analysis.get("pension_eligible", False))
+    runway_margin_years = round(statutory_ret_age - age_at_maturity, 1)
+
+    # 4. Bureau Reputation & Track Record
+    cibil_score = int(portfolio.get("cibil_score", 750))
+    closed_repaid = int(portfolio.get("closed_repaid_count", 0))
+
+    # 5. Base Quantum Kernel Inference
     qsvm_res = execute_background_qsvm_underwriting(utilization_pct, late_30, late_60, late_90)
-    q_pred = qsvm_res["qsvm_pred"]
-    risk_index = qsvm_res["combined_risk_index"]
-    margin = qsvm_res.get("margin", 2.14)
+    base_margin = qsvm_res.get("margin", 2.14)
 
-    # Class determination
+    # 6. Multi-Factor Solvency Calibration
+    # Leverage adjustment
+    if exact_dti_pct <= 32.0:
+        dti_mod = +0.40
+    elif exact_dti_pct <= 48.0:
+        dti_mod = +0.10
+    elif exact_dti_pct <= 60.0:
+        dti_mod = -0.45
+    elif exact_dti_pct <= 72.0:
+        dti_mod = -1.10
+    else:
+        dti_mod = -2.00
+
+    # LTI multiple adjustment
+    if lti_multiplier <= 2.5:
+        lti_mod = +0.20
+    elif lti_multiplier <= 4.5:
+        lti_mod = 0.00
+    elif lti_multiplier <= 7.0:
+        lti_mod = -0.45
+    else:
+        lti_mod = -0.90
+
+    # Career runway adjustment
+    if not maturity_exceeds and runway_margin_years >= 5:
+        runway_mod = +0.25
+    elif maturity_exceeds and pension_eligible:
+        runway_mod = -0.30
+    elif maturity_exceeds and not pension_eligible:
+        runway_mod = -1.45
+    else:
+        runway_mod = 0.00
+
+    # CIBIL calibration
+    if cibil_score >= 775:
+        bureau_mod = +0.45
+    elif cibil_score >= 725:
+        bureau_mod = +0.15
+    elif cibil_score >= 675:
+        bureau_mod = -0.50
+    else:
+        bureau_mod = -1.35
+
+    # Seasoning bonus
+    history_mod = min(0.35, closed_repaid * 0.15)
+
+    # Composite Solvency Margin
+    comp_margin = round(base_margin + dti_mod + lti_mod + runway_mod + bureau_mod + history_mod, 2)
+
+    # Regulatory Hard-Stop Overrides (Basel III & RBI Norms)
+    if has_npa or late_90 > 0:
+        comp_margin = min(comp_margin, -2.25)
+    elif exact_dti_pct > 75.0:
+        comp_margin = min(comp_margin, -1.75)
+    elif cibil_score < 600:
+        comp_margin = min(comp_margin, -1.85)
+
+    # Derived Class & Accurate Risk Index
+    q_pred = 0 if comp_margin > 0.0 else 1
+    calibrated_q_score = 1.0 / (1.0 + np.exp(comp_margin))
+    risk_index = int(round(calibrated_q_score * 100))
+    confidence_pct = round(max(80.0, min(99.6, 50.0 + abs(comp_margin) * 16.0)), 1)
+
+    # Underwriting Classification Labels
     if q_pred == 0:
         class_label = "Tier A • Prime Credit Risk (Low Default Probability)"
         class_badge = "TIER A • PRIME CREDIT"
-        confidence_pct = round(max(78.0, min(99.6, 100.0 - (risk_index * 0.75))), 1)
-        quantum_verdict = "Low Probability of Default • Robust Solvency Profile"
+        quantum_verdict = f"Low Probability of Default • Robust Solvency Profile (Buffer: {comp_margin:+.2f})"
     else:
         class_label = "Tier C • Sub-Prime / Adverse Default Risk"
         class_badge = "TIER C • DEFAULT RISK"
-        confidence_pct = round(max(80.0, min(99.2, 50.0 + (risk_index * 0.5))), 1)
-        quantum_verdict = "Elevated Delinquency Probability • Significant Default Risk"
+        quantum_verdict = f"Elevated Delinquency Probability • Significant Default Risk (Deficit: {comp_margin:+.2f})"
 
-    cibil = portfolio.get("cibil_score", 750)
-    dti_str = app_data.get("answer", {}).get("dti_ratio", "30%")
-    dti_val = float(str(dti_str).replace("%", "")) if dti_str else 30.0
-    mat_exceeds = ret_analysis.get("maturity_exceeds_retirement", False)
-
-    # Comprehensive Underwriter Guidance
-    if q_pred == 0 and cibil >= 700 and not mat_exceeds and dti_val <= 50.0 and late_30 == 0:
+    # Comprehensive Multi-Dimensional Underwriter Guidance
+    if q_pred == 0 and cibil_score >= 700 and not maturity_exceeds and exact_dti_pct <= 50.0 and late_30 == 0:
         rec_status = "ELIGIBLE_FOR_SANCTION"
         rec_title = "Appraisal Recommendation: ELIGIBLE FOR IN-PRINCIPLE SANCTION"
         rec_badge = "RECOMMENDED: APPROVE"
         rec_color = "emerald"
         rec_decision = "APPROVE"
         rec_summary = (
-            f"The automated credit appraisal engine projects the applicant's credit profile deeply into the prime, low-risk solvency band "
-            f"(Solvency Margin: {margin:+.2f}, Reliability: {confidence_pct}%). "
-            f"CIBIL score ({cibil}) is prime, FOIR ({dti_val}%) is well within safe thresholds, and loan matures safely within active working life."
+            f"The comprehensive quantum appraisal engine validates the applicant across all 8 credit dimensions: "
+            f"Composite Solvency Margin of {comp_margin:+.2f} (Reliability: {confidence_pct}%), "
+            f"Prime CIBIL ({cibil_score}), healthy DTI ({exact_dti_pct}%), manageable leverage ({lti_multiplier}x annual income), "
+            f"and robust active career runway ({runway_margin_years} yrs before retirement)."
         )
     elif q_pred == 0:
         rec_status = "CONDITIONAL_SANCTION"
@@ -591,17 +684,19 @@ def evaluate_qsvm_for_application(app_data: Dict[str, Any]) -> Dict[str, Any]:
         rec_color = "amber"
         rec_decision = "CONDITIONAL"
         factors = []
-        if mat_exceeds:
-            factors.append(f"Maturity age ({ret_analysis.get('age_at_maturity')} Yrs) exceeds retirement age ({ret_analysis.get('statutory_retirement_age')} Yrs)")
-        if dti_val > 50.0:
-            factors.append(f"DTI/FOIR ({dti_val}%) exceeds policy limit of 50%")
+        if maturity_exceeds:
+            factors.append(f"Maturity age ({age_at_maturity} Yrs) exceeds retirement age ({statutory_ret_age} Yrs)")
+        if exact_dti_pct > 50.0:
+            factors.append(f"DTI/FOIR ({exact_dti_pct}%) exceeds standard 50% limit")
+        if lti_multiplier > 4.5:
+            factors.append(f"High loan-to-income multiple ({lti_multiplier}x)")
         if late_30 > 0:
             factors.append(f"{late_30} past 30-59 DPD delay(s)")
-        if cibil < 700:
-            factors.append(f"CIBIL score ({cibil}) is below prime 700 benchmark")
+        if cibil_score < 700:
+            factors.append(f"CIBIL score ({cibil_score}) is below prime 700 benchmark")
         rec_summary = (
-            f"Automated risk engine classifies applicant as Low Risk, but banking risk covenants apply: {'; '.join(factors)}. "
-            f"Underwriter should consider tenor alignment or a 20% limit restriction."
+            f"Quantum engine classifies applicant as Solvency Margin Positive ({comp_margin:+.2f}), but banking covenants apply: {'; '.join(factors)}. "
+            f"Underwriter should consider tenure alignment or a 20-25% limit haircut."
         )
     else:
         rec_status = "INELIGIBLE_HIGH_RISK"
@@ -609,9 +704,20 @@ def evaluate_qsvm_for_application(app_data: Dict[str, Any]) -> Dict[str, Any]:
         rec_badge = "RECOMMENDED: REJECT"
         rec_color = "rose"
         rec_decision = "REJECT"
+        reasons = []
+        if has_npa or late_90 > 0:
+            reasons.append("Severe 90+ DPD / Non-Performing Asset records")
+        if late_60 > 0:
+            reasons.append(f"{late_60} 60-89 DPD moderate delinquent installment(s)")
+        if exact_dti_pct > 70.0:
+            reasons.append(f"Critical over-leveraging with DTI of {exact_dti_pct}%")
+        if utilization_pct > 75.0:
+            reasons.append(f"Elevated credit card revolving utilization ({utilization_pct}%)")
+        if not reasons:
+            reasons.append("Composite solvency score breached default risk boundary")
         rec_summary = (
-            f"The automated risk engine mapped the borrower profile directly into the elevated default risk territory (Solvency Margin: {margin:+.2f}, Reliability: {confidence_pct}%). "
-            f"Adverse delinquency records ({late_30} 30-day, {late_60} 60-day, {late_90} 90+ DPD) and elevated utilization ({utilization_pct}%) indicate severe credit default probability."
+            f"The automated risk engine mapped the borrower profile directly into default risk territory (Solvency Margin: {comp_margin:+.2f}, Risk Index: {risk_index}/100). "
+            f"Triggering factors: {'; '.join(reasons)}."
         )
 
     analysis = {
@@ -622,9 +728,9 @@ def evaluate_qsvm_for_application(app_data: Dict[str, Any]) -> Dict[str, Any]:
         "quantum_verdict": quantum_verdict,
         "quantum_risk_index": risk_index,
         "confidence_pct": confidence_pct,
-        "kernel_margin": round(margin, 3),
-        "kernel_alignment": f"{margin:+.2f} (Solvency Margin Buffer)",
-        "hilbert_space": "16-Factor Risk Vector Analysis",
+        "kernel_margin": comp_margin,
+        "kernel_alignment": f"{comp_margin:+.2f} (Composite Solvency Margin)",
+        "hilbert_space": "8-Dimensional Multi-Vector Analysis",
         "quantum_recommendation": rec_status,
         "recommendation_title": rec_title,
         "recommendation_badge": rec_badge,
@@ -635,7 +741,21 @@ def evaluate_qsvm_for_application(app_data: Dict[str, Any]) -> Dict[str, Any]:
             "revolving_utilization_pct": utilization_pct,
             "late_30_59_count": late_30,
             "late_60_89_count": late_60,
-            "late_90_count": late_90
+            "late_90_count": late_90,
+            "debt_to_income_pct": exact_dti_pct,
+            "loan_to_income_multiple": lti_multiplier,
+            "monthly_disposable_surplus": int(net_monthly_surplus),
+            "cibil_score": cibil_score,
+            "service_runway_buffer_years": runway_margin_years,
+            "statutory_retirement_age": statutory_ret_age,
+            "closed_repaid_count": closed_repaid
+        },
+        "solvency_vectors": {
+            "quantum_delinquency_margin": round(base_margin, 2),
+            "financial_leverage_impact": round(dti_mod + lti_mod, 2),
+            "career_runway_impact": round(runway_mod, 2),
+            "bureau_reputation_impact": round(bureau_mod + history_mod, 2),
+            "composite_solvency_margin": comp_margin
         }
     }
     return analysis
