@@ -37,6 +37,25 @@ STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 RESULTS_DIR = os.path.join(PROJECT_ROOT, "results")
 PROCESSED_DIR = os.path.join(PROJECT_ROOT, "data", "processed")
 
+# Automatically load .env configuration if present
+env_file = os.path.join(PROJECT_ROOT, ".env")
+if os.path.exists(env_file):
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(env_file)
+    except Exception:
+        try:
+            with open(env_file, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        k_s = k.strip()
+                        if k_s not in os.environ:
+                            os.environ[k_s] = v.strip().strip("'\"")
+        except Exception:
+            pass
+
 sys.path.append(SRC_DIR)
 from utils import load_model, load_metrics
 
