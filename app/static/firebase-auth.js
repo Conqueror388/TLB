@@ -10,14 +10,15 @@
  *   - Compatible with Firebase Auth (synthesizes secure internal identity) + Supabase database
  */
 
-// ─── Firebase Config (Optional Production Cloud Integration) ────────────────
+// ─── Firebase Config (Production Cloud Integration) ─────────────────────────
 const FIREBASE_CONFIG = {
-  apiKey:            "YOUR_FIREBASE_API_KEY",
-  authDomain:        "team-legends-bank.firebaseapp.com",
-  projectId:         "team-legends-bank",
-  storageBucket:     "team-legends-bank.appspot.com",
-  messagingSenderId: "1234567890",
-  appId:             "1:1234567890:web:abcdef"
+  apiKey: "AIzaSyCnNat6HmTFQIb339qEDx-fTQuXcHREjhE",
+  authDomain: "tlb-bank.firebaseapp.com",
+  projectId: "tlb-bank",
+  storageBucket: "tlb-bank.firebasestorage.app",
+  messagingSenderId: "269135531006",
+  appId: "1:269135531006:web:4a38c978941b9c0ba40eaf",
+  measurementId: "G-EYPHBR2SQM"
 };
 
 // ─── Bank Auth Session State ────────────────────────────────────────────────
