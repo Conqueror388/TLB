@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: tlb-bank-los
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.server:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: TLB_ADMIN_USER
+        value: admin
+      - key: TLB_ADMIN_PASSWORD
+        value: legends2026
+      - key: TLB_ADMIN_TOKEN
+        value: TLB-SECURE-TOKEN-UNDERWRITER-2026
