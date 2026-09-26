@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEAM LEGENDS BANK (TLB) • Online Loan Application & Instant Credit Appraisal System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+
+    <!-- Firebase SDK (v9 compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+    <!-- ═══════════════════════════════════════════════════════
+         AUTHENTIC INDIAN BANKING AUTH GATE
+         Retail Net Banking | Instant Account Reg | Officer Desk
+         ═══════════════════════════════════════════════════════ -->
+    <div id="auth-gate" style="display:none;">
+        <div class="auth-gate-bg">
+            <div class="ambient-glow glow-top-left"></div>
+            <div class="ambient-glow glow-bottom-right"></div>
+        </div>
+        <div class="auth-desktop-wrapper">
+            <!-- ─── DESKTOP LEFT SHOWCASE: EXECUTIVE INSTITUTIONAL PORTAL ─── -->
+            <div class="auth-showcase-column">
+                <div class="showcase-brand-header">
+                    <div class="bank-emblem-circle showcase-emblem"><span>TLB</span></div>
+                    <div>
+                        <div class="showcase-bank-name">TEAM LEGENDS BANK</div>
+                        <div class="showcase-bank-sub">RETAIL &amp; DIGITAL BANKING DIVISION</div>
+                    </div>
+                </div>
+
+                <div class="showcase-badge-pill">
+                    <span class="badge-dot-live"></span>
+                    <span>OFFICIAL INTERNET BANKING PORTAL</span>
+                </div>
+
+                <h1 class="showcase-headline">
+                    Welcome to Internet Banking
+                </h1>
+                <p class="showcase-subtext">
+                    Access your loan facilities, track disbursements, and submit digital credit applications securely with bank-grade multi-factor authentication.
+                </p>
+
+                <!-- Professional Security Notice Card -->
+                <div class="bank-advisory-card">
+                    <div class="advisory-header">
+                        <svg class="advisory-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="m9 12 2 2 4-4"/>
+                        </svg>
+                        <span class="advisory-title">Important Customer Security Advisory</span>
+                    </div>
+                    <ul class="advisory-list">
+                        <li>
+                            <strong>Never Share Credentials:</strong> Team Legends Bank officials will never contact you asking for your Net Banking password, 6-digit MPIN, or One Time Password (OTP).
+                        </li>
+                        <li>
+                            <strong>Verify SSL Security:</strong> Ensure the browser address bar begins with <code>https://</code> with an active security padlock before signing in.
+                        </li>
+                        <li>
+                            <strong>Session Security:</strong> Always click 'Sign Out' when exiting the banking portal and avoid accessing financial services on public or shared computers.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Customer Helpline & Support Strip -->
+                <div class="bank-contact-strip">
+                    <div class="contact-strip-item">
+                        <svg class="contact-strip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                        <div>
+                            <span class="contact-lbl">24x7 Customer Helpline</span>
+                            <span class="contact-val">1800 2026 8888</span>
+                        </div>
+                    </div>
+                    <div class="contact-strip-item">
+                        <svg class="contact-strip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                        <div>
+                            <span class="contact-lbl">Customer Support Email</span>
+                            <span class="contact-val">customercare@tlb.bank.in</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trust Compliance Footnote -->
+                <div class="showcase-compliance">
+                    <span>Regulated by Reserve Bank of India (RBI)</span>
+                    <span>•</span>
+                    <span>256-Bit TLS Encryption</span>
+                    <span>•</span>
+                    <span>DICGC Insured</span>
+                </div>
+            </div>
+
+            <!-- ─── DESKTOP RIGHT TERMINAL: NET BANKING ACCESS ─── -->
+            <div class="auth-terminal-column">
+                <div class="auth-card bank-curved-card">
+                <!-- Bank Identity Header -->
+                <div class="auth-brand">
+                    <div class="bank-emblem-circle auth-emblem"><span>TLB</span></div>
+                    <div>
+                        <div class="auth-brand-name">TEAM LEGENDS BANK</div>
+                        <div class="auth-brand-sub">RETAIL NET BANKING & CREDIT PORTAL</div>
+                    </div>
+                </div>
+
+                <!-- Authentic Banking Mode Selector Tabs -->
+                <div class="auth-tabs-segmented" id="auth-tabs-bar">
+                    <button type="button" class="auth-tab-btn active" id="tab-auth-login" onclick="switchAuthPane('login')">
+                        Net Banking
+                    </button>
+                    <button type="button" class="auth-tab-btn" id="tab-auth-register" onclick="switchAuthPane('register')">
+                        New Applicant
+                    </button>
+                    <button type="button" class="auth-tab-btn" id="tab-auth-officer" onclick="switchAuthPane('officer')">
+                        Officer Desk
+                    </button>
+                </div>
+
+                <!-- Shared Error Banner -->
+                <div class="auth-error-banner" id="auth-error-display"></div>
+
+                <!-- ─── PANE 1: RETAIL NET BANKING LOGIN ─── -->
+                <div id="auth-pane-login">
+                    <h2 class="auth-title">Net Banking Login</h2>
+                    <p class="auth-desc">Sign in with your Customer ID or registered mobile to access your loan facility</p>
+                    <form onsubmit="handleBankLoginSubmit(event)">
+                        <div class="auth-field">
+                            <label class="form-label">Customer ID / Registered Mobile *</label>
+                            <input id="bank-cust-id-input" type="text" class="curved-input font-mono" placeholder="e.g. TLB849201 or 9876543210" required>
+                            <span class="field-hint">Your 8-digit Customer ID or 10-digit registered mobile number</span>
+                        </div>
+                        <div class="auth-field">
+                            <label class="form-label">Net Banking Password / 6-Digit MPIN *</label>
+                            <input id="bank-mpin-input" type="password" class="curved-input font-mono" placeholder="••••••" maxlength="16" required>
+                            <span class="field-hint">Your secure 6-digit MPIN or Net Banking password</span>
+                        </div>
+                        <button type="submit" class="auth-submit-btn">Proceed to Secure OTP →</button>
+                    </form>
+
+                    <!-- Instant One-Click Demo Access -->
+                    <div class="auth-demo-shortcut" onclick="quickFillDemoCustomer()" title="Click to auto-sign in as Demo Applicant Rahul Sharma">
+                        <div class="demo-shortcut-left">
+                            <span class="demo-shortcut-title">Demo Customer Credentials</span>
+                            <span class="demo-shortcut-sub">ID: TLB849201 • MPIN: 849201</span>
+                        </div>
+                        <span class="demo-shortcut-badge">AUTO FILL</span>
+                    </div>
+                </div>
+
+                <!-- ─── PANE 2: NEW LOAN REGISTRATION ─── -->
+                <div id="auth-pane-register" style="display:none;">
+                    <h2 class="auth-title">Instant Loan Registration</h2>
+                    <p class="auth-desc">New to Team Legends Bank? Register your profile in 30 seconds</p>
+                    <form onsubmit="handleBankRegisterSubmit(event)">
+                        <div class="auth-field">
+                            <label class="form-label">Full Legal Name *</label>
+                            <input id="reg-name-input" type="text" class="curved-input" placeholder="e.g. Rahul Sharma" required>
+                        </div>
+                        <div class="auth-field">
+                            <label class="form-label">Core Bank Account Number *</label>
+                            <input id="reg-acc-input" type="text" class="curved-input font-mono" placeholder="e.g. 100928374651" maxlength="18" required>
+                        </div>
+                        <div class="auth-field">
+                            <label class="form-label">Income Tax PAN Number *</label>
+                            <input id="reg-pan-input" type="text" class="curved-input font-mono" placeholder="e.g. ABCDE1234F" maxlength="10" required>
+                        </div>
+                        <div class="auth-field">
+                            <label class="form-label">Registered Mobile Number *</label>
+                            <input id="reg-mob-input" type="tel" class="curved-input font-mono" placeholder="10-digit mobile" maxlength="10" required>
+                        </div>
+                        <div class="form-row-2" style="margin-bottom:0.75rem;">
+                            <div class="auth-field" style="margin-bottom:0;">
+                                <label class="form-label">Set 6-Digit MPIN *</label>
+                                <input id="reg-pin-input" type="password" class="curved-input font-mono" placeholder="Create MPIN" maxlength="6" required>
+                            </div>
+                            <div class="auth-field" style="margin-bottom:0;">
+                                <label class="form-label">Confirm MPIN *</label>
+                                <input id="reg-pin-confirm" type="password" class="curved-input font-mono" placeholder="Repeat MPIN" maxlength="6" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="auth-submit-btn">Register & Dispatch 2FA OTP →</button>
+                    </form>
+                </div>
+
+                <!-- ─── PANE 3: BRANCH OFFICER / UNDERWRITER DESK ─── -->
+                <div id="auth-pane-officer" style="display:none;">
+                    <h2 class="auth-title">Underwriter Desk Login</h2>
+                    <p class="auth-desc">Authorized credit appraisal terminal for bank loan approval officers</p>
+                    <form onsubmit="handleBankOfficerLoginSubmit(event)">
+                        <div class="auth-field">
+                            <label class="form-label">Officer Employee Code / Desk ID *</label>
+                            <input id="officer-code-input" type="text" class="curved-input font-mono" placeholder="admin or TLB-CCO-1042" value="admin" required>
+                        </div>
+                        <div class="auth-field">
+                            <label class="form-label">Authorizer Security Passkey *</label>
+                            <input id="officer-pass-input" type="password" class="curved-input font-mono" placeholder="legends2026" value="legends2026" required>
+                        </div>
+                        <button type="submit" class="auth-submit-btn">Authorize Underwriting Terminal →</button>
+                    </form>
+                    <div class="admin-login-hint" style="margin-top:1rem;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block; vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg><strong>Officer Credentials:</strong> ID: <code>admin</code> | Passkey: <code>legends2026</code>
+                    </div>
+                </div>
+
+                <!-- ─── PANE 4: MANDATORY 2FA MOBILE SMS OTP SCREEN ─── -->
+                <div id="auth-pane-otp" style="display:none;">
+                    <div class="otp-badge-rbi"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>RBI MANDATORY 2FA VERIFICATION</div>
+                    <h2 class="auth-title">Enter SMS OTP</h2>
+                    <p class="auth-desc">A 6-digit verification code has been dispatched to your registered mobile ending in <strong id="otp-phone-display">+91 ••••••2026</strong></p>
+
+                    <form onsubmit="handleVerifyOTPSubmit(event)">
+                        <div class="auth-field">
+                            <input id="bank-otp-input" type="text" class="curved-input otp-input-large" placeholder="000000" maxlength="6" autocomplete="one-time-code" required>
+                        </div>
+                        <div class="otp-actions-wrap">
+                            <button type="button" id="btn-autofill-otp" class="otp-autofill-btn">Auto-Fill Demo OTP</button>
+                            <div>
+                                <span id="otp-countdown-text" style="color:var(--text-muted);font-size:0.75rem;"></span>
+                                <button type="button" id="btn-resend-otp" class="otp-resend-btn" onclick="resendBankOTP()" disabled>Resend OTP</button>
+                            </div>
+                        </div>
+                        <button type="submit" class="auth-submit-btn" style="margin-top:1.25rem;">Verify OTP & Enter Loan Portal →</button>
+                    </form>
+
+                    <div style="text-align:center;margin-top:1.25rem;">
+                        <button type="button" class="auth-link-btn" onclick="switchAuthPane('login')">← Back to Customer Sign In</button>
+                    </div>
+                </div>
+
+                <div class="auth-footer-note">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <span>Team Legends Bank • 256-Bit SSL Encrypted & RBI Regulatory Compliance</span>
+                </div>
+            </div><!-- /.auth-card -->
+        </div><!-- /.auth-terminal-column -->
+    </div><!-- /.auth-desktop-wrapper -->
+</div><!-- /#auth-gate -->
+
+    <!-- ═══════════════════════════════════════════════════════
+         MAIN APP — hidden until authenticated
+         ═══════════════════════════════════════════════════════ -->
+    <div id="main-app-wrap" style="display:none;">
+
+    <!-- Ambient Radial Glow Backdrops -->
+    <div class="ambient-glow glow-top-left"></div>
+    <div class="ambient-glow glow-bottom-right"></div>
+
+    <!-- Curved Bank Navbar -->
+    <header class="navbar-curved">
+        <div class="nav-brand">
+            <div class="bank-emblem-circle">
+                <span>TLB</span>
+            </div>
+            <div>
+                <div class="brand-text" data-i18n="brand_name">TEAM LEGENDS BANK (TLB)</div>
+                <div class="brand-subtext" data-i18n="brand_sub">RETAIL & COMMERCIAL LENDING DIVISION • DIGITAL CREDIT APPRAISAL</div>
+            </div>
+        </div>
+        <div class="nav-meta">
+            <!-- Sleek Single Settings & Profile Trigger Button -->
+            <div class="settings-menu-container" id="settings-menu-container">
+                <button type="button" class="settings-trigger-btn" id="navbar-settings-btn" onclick="toggleSettingsMenu(event)" title="Settings, Preferences &amp; Profile">
+                    <span class="settings-trigger-avatar" id="nav-trigger-avatar">RS</span>
+                    <span class="settings-trigger-text" id="nav-trigger-name">Rahul Sharma</span>
+                    <svg class="settings-gear-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    <span class="settings-online-dot"></span>
+                </button>
+
+                <!-- Floating Settings & Profile Dropdown Panel -->
+                <div class="settings-dropdown-panel" id="settings-dropdown-panel">
+                    <!-- 1. Profile / Account Identity Section -->
+                    <div class="settings-profile-card">
+                        <div class="settings-profile-avatar-large" id="settings-profile-avatar">RS</div>
+                        <div class="settings-profile-info">
+                            <div class="settings-profile-name" id="settings-profile-name">Rahul Sharma</div>
+                            <div class="settings-profile-id" id="settings-profile-id">TLB849201</div>
+                            <div class="settings-profile-meta" id="settings-profile-account">Acc: 100928374651 • PAN: ABCDE1234F</div>
+                        </div>
+                        <span class="settings-role-badge applicant" id="settings-profile-role">APPLICANT</span>
+                    </div>
+
+                    <div class="settings-divider"></div>
+
+                    <!-- 2. Appearance / Theme Toggle -->
+                    <div class="settings-section">
+                        <div class="settings-row-between">
+                            <span class="settings-section-title">DISPLAY THEME</span>
+                            <button type="button" id="theme-toggle-btn" class="theme-toggle-pill" title="Toggle Two-Tone Theme">
+                                <span class="theme-toggle-thumb">
+                                    <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="5"></circle>
+                                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                                    </svg>
+                                    <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                                    </svg>
+                                </span>
+                                <span class="theme-toggle-label" id="theme-mode-text">LIGHT</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="settings-divider"></div>
+
+                    <!-- 3. Language Changer -->
+                    <div class="settings-section">
+                        <div class="settings-row-between">
+                            <span class="settings-section-title">PORTAL LANGUAGE</span>
+                            <div class="lang-selector-pill settings-lang-pill">
+                                <svg class="lang-globe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                </svg>
+                                <select id="app-language-select" class="lang-select-native" onchange="setLanguage(this.value);" title="Choose Portal Language">
+                                    <option value="en">English (EN)</option>
+                                    <option value="hi">हिन्दी (Hindi)</option>
+                                    <option value="ta">தமிழ் (Tamil)</option>
+                                    <option value="te">తెలుగు (Telugu)</option>
+                                    <option value="bn">বাংলা (Bengali)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-divider"></div>
+
+                    <!-- 4. Sign Out & Security Session -->
+                    <div class="settings-footer">
+                        <div class="settings-security-note">
+                            <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block; vertical-align:middle; margin-right:4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>256-Bit TLS • RBI Compliant Session</span>
+                        </div>
+                        <button type="button" class="settings-signout-btn" onclick="signOutBankUser()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            <span id="settings-signout-text">Sign Out of Net Banking</span>
+                        </button>
+                    </div>
+                </div><!-- /.settings-dropdown-panel -->
+            </div><!-- /.settings-menu-container -->
+
+            <!-- Legacy fallback holders -->
+            <div id="navbar-user-chip" style="display:none;"></div>
+            <button id="navbar-signin-btn" class="btn-pill-secondary" onclick="openAuthModal('login')" style="display:none;">Sign In</button>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- ═══════════════════════════════════════════════════════
+             APPLICANT PORTAL VIEW (Multi-Step Borrower Application)
+             ═══════════════════════════════════════════════════════ -->
+        <div id="applicant-portal-view">
+
+        <!-- MULTI-PAGE PROGRESS STEPPER BAR -->
+        <div class="wizard-stepper-wrap" id="app-stepper">
+            <div class="wizard-step-node active" data-step="1" id="step-node-1">
+                <span class="step-circle">1</span>
+                <div class="step-meta">
+                    <span class="step-label" data-i18n="step_1_title">Identity & Job</span>
+                    <span class="step-subtext" data-i18n="step_1_sub">Your Details & Sector</span>
+                </div>
+            </div>
+            <div class="wizard-step-connector" id="step-connector-1"></div>
+            <div class="wizard-step-node" data-step="2" id="step-node-2">
+                <span class="step-circle">2</span>
+                <div class="step-meta">
+                    <span class="step-label" data-i18n="step_2_title">Monthly Income</span>
+                    <span class="step-subtext" data-i18n="step_2_sub">Safe 50% EMI Limit</span>
+                </div>
+            </div>
+            <div class="wizard-step-connector" id="step-connector-2"></div>
+            <div class="wizard-step-node" data-step="3" id="step-node-3">
+                <span class="step-circle">3</span>
+                <div class="step-meta">
+                    <span class="step-label" data-i18n="step_3_title">Loan & EMI</span>
+                    <span class="step-subtext" data-i18n="step_3_sub">Monthly Cost Working</span>
+                </div>
+            </div>
+            <div class="wizard-step-connector" id="step-connector-3"></div>
+            <div class="wizard-step-node" data-step="4" id="step-node-4">
+                <span class="step-circle">4</span>
+                <div class="step-meta">
+                    <span class="step-label" data-i18n="step_4_title">Past Loans</span>
+                    <span class="step-subtext" data-i18n="step_4_sub">Credit History</span>
+                </div>
+            </div>
+            <div class="wizard-step-connector" id="step-connector-4"></div>
+            <div class="wizard-step-node" data-step="5" id="step-node-5">
+                <span class="step-circle">5</span>
+                <div class="step-meta">
+                    <span class="step-label" data-i18n="step_5_title">Sanction Letter</span>
+                    <span class="step-subtext" data-i18n="step_5_sub">Instant Decision</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 1: Sculpted Organic Multi-Page Loan Application Form -->
+        <form id="loan-application-form" class="bank-curved-card form-card-animated" novalidate>
+
+            <!-- PAGE 1: Identity & Sector Superannuation -->
+            <div class="wizard-page active-page" id="page-step-1">
+                <div class="wizard-page-header">
+                    <div>
+                        <h2 class="wizard-page-title">
+                            <span data-i18n="page_1_heading">Step 1 of 4 • Your Details & Job Sector</span>
+                        </h2>
+                        <p class="card-desc-curved" data-i18n="page_1_desc">Enter your name, account details, and where you work so we can calculate your retirement timeline and verify your identity.</p>
+                    </div>
+                    <span class="wizard-page-badge" data-i18n="page_1_badge">STEP 1 • KYC & JOB SECTOR</span>
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-field">
+                        <label class="form-label" for="app-name" data-i18n="full_name_label">Full Name *</label>
+                        <input type="text" id="app-name" class="curved-input" placeholder="e.g. Rahul Sharma" data-i18n-ph="full_name_ph" required>
+                        <span class="field-hint" data-i18n="full_name_hint">As printed on your PAN card or Aadhaar</span>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label" for="app-age" data-i18n="age_label">Your Age (Years) *</label>
+                        <input type="number" id="app-age" class="curved-input font-mono" placeholder="e.g. 34" data-i18n-ph="age_ph" min="18" max="75" value="34" required>
+                        <span class="field-hint" data-i18n="age_hint">Helps us plan a safe repayment schedule before retirement</span>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-field">
+                        <label class="form-label" for="app-account" data-i18n="account_label">Bank Account Number *</label>
+                        <input type="text" id="app-account" class="curved-input font-mono" placeholder="e.g. 100928374651" data-i18n-ph="account_ph" required>
+                        <span class="field-hint" data-i18n="account_hint">Account where your loan amount will be deposited</span>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label" for="app-pan" data-i18n="pan_label">PAN Card Number *</label>
+                        <input type="text" id="app-pan" class="curved-input font-mono" placeholder="e.g. ABCDE1234F" data-i18n-ph="pan_ph" maxlength="10" required>
+                        <span class="field-hint" data-i18n="pan_hint">Your 10-digit PAN number (5 letters, 4 numbers, 1 letter)</span>
+                    </div>
+                </div>
+
+                <!-- Complex Sector Superannuation (Retirement Age) Selector -->
+                <div class="form-field">
+                    <label class="form-label" for="app-sector" data-i18n="sector_label">Where Do You Work? (Job / Industry) *</label>
+                    <select id="app-sector" class="curved-select font-semibold">
+                        <option value="PRIVATE_CORPORATE" selected data-i18n="sector_corp">Private Corporate / IT / MNC (Retirement: 58 Yrs)</option>
+                        <option value="CENTRAL_GOVT" data-i18n="sector_cg">Central Government Services (Retirement: 60 Yrs - Pension)</option>
+                        <option value="STATE_GOVT" data-i18n="sector_sg">State Government Administration (Retirement: 60 Yrs - Pension)</option>
+                        <option value="PSU_BANKING" data-i18n="sector_psu">Public Sector Units & PSU Banks (Retirement: 60 Yrs - PF/Gratuity)</option>
+                        <option value="DEFENSE_ARMED" data-i18n="sector_def">Armed Forces & Defense Personnel (Retirement: 54 Yrs - Pension)</option>
+                        <option value="HEALTHCARE_DOCTOR" data-i18n="sector_med">Doctors & Healthcare Practitioners (Retirement: 65 Yrs)</option>
+                        <option value="ACADEMIC_EDUCATION" data-i18n="sector_edu">College Professors & Teachers (Retirement: 65 Yrs)</option>
+                        <option value="LEGAL_JUDICIARY" data-i18n="sector_leg">Lawyers & Chartered Accountants (Retirement: 68 Yrs)</option>
+                        <option value="BUSINESS_ENTERPRISE" data-i18n="sector_biz">Business Owners & Traders (Retirement: 70 Yrs)</option>
+                    </select>
+                    <span class="field-hint" data-i18n="sector_hint">We ensure your loan finishes while you are still earning, with zero stress after retirement</span>
+                </div>
+
+                <!-- Interactive Live Retirement Runway Capsule -->
+                <div class="retirement-runway-pod" id="retirement-live-pod">
+                    <div class="runway-stat">
+                        <span class="runway-label" data-i18n="statutory_retirement_label">RETIREMENT AGE</span>
+                        <span class="runway-val" id="disp-sector-ret-age">58 Yrs</span>
+                        <span class="runway-sub" id="disp-sector-pension">Corporate Sector</span>
+                    </div>
+                    <div class="runway-stat">
+                        <span class="runway-label" data-i18n="service_runway_label">WORKING YEARS LEFT</span>
+                        <span class="runway-val text-emerald" id="disp-service-runway">24 Yrs</span>
+                        <span class="runway-sub" data-i18n="service_runway_sub">Active career remaining</span>
+                    </div>
+                    <div class="runway-stat">
+                        <span class="runway-label" data-i18n="age_maturity_label">AGE WHEN LOAN ENDS</span>
+                        <span class="runway-val" id="disp-maturity-age">37 Yrs</span>
+                        <span class="runway-sub text-emerald" id="disp-maturity-status" data-i18n="maturity_amortized_sub">Finishes within career</span>
+                    </div>
+                </div>
+
+                <div class="working-explainer-pod">
+                    <span><strong data-i18n="why_sector_matters_title">Why Job Sector Matters:</strong> <span data-i18n="why_sector_matters_desc">Retirement ages differ between private jobs (58 yrs), government service (60 yrs), and business (70 yrs). We make sure your loan finishes while you are still earning, so your family never faces repayment stress.</span></span>
+                </div>
+
+                <div class="wizard-nav-row">
+                    <span class="wizard-step-counter" data-i18n="page_1_counter">Page 1 of 4 • Identity & Sector</span>
+                    <button type="button" class="btn-pill-primary btn-next-step" data-next="2">
+                        <span data-i18n="btn_continue_to_income">Next: Monthly Income & Savings →</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PAGE 2: Employment & Understandable Income Working -->
+            <div class="wizard-page" id="page-step-2">
+                <div class="wizard-page-header">
+                    <div>
+                        <h2 class="wizard-page-title">
+                            <span data-i18n="page_2_heading">Step 2 of 4 • Your Monthly Income & Savings</span>
+                        </h2>
+                        <p class="card-desc-curved" data-i18n="page_2_desc">Tell us how much you earn each month. We make sure your monthly EMI leaves plenty of savings for your family and living expenses.</p>
+                    </div>
+                    <span class="wizard-page-badge" data-i18n="page_2_badge">STEP 2 • INCOME CAPACITY</span>
+                </div>
+
+                <div class="form-field">
+                    <label class="form-label" data-i18n="employment_label">What Type of Work Do You Do? *</label>
+                    <div class="modern-option-grid" id="employment-options">
+                        <div class="option-pill-card active" data-val="Salaried">
+                            <span class="option-pill-icon">
+                                <svg class="option-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                </svg>
+                            </span>
+                            <div class="option-pill-info">
+                                <div class="option-pill-title" data-i18n="emp_salaried_title">Salaried Employee</div>
+                                <div class="option-pill-desc" data-i18n="emp_salaried_desc">Private company, IT, MNC, or government</div>
+                            </div>
+                            <span class="option-pill-check">✓</span>
+                        </div>
+                        <div class="option-pill-card" data-val="Self-Employed">
+                            <span class="option-pill-icon">
+                                <svg class="option-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                            </span>
+                            <div class="option-pill-info">
+                                <div class="option-pill-title" data-i18n="emp_prof_title">Professional Practice</div>
+                                <div class="option-pill-desc" data-i18n="emp_prof_desc">Doctor, Chartered Accountant, Lawyer, Consultant</div>
+                            </div>
+                            <span class="option-pill-check">✓</span>
+                        </div>
+                        <div class="option-pill-card" data-val="Business">
+                            <span class="option-pill-icon">
+                                <svg class="option-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M9 8h1M9 12h1M9 16h1M14 8h1M14 12h1M14 16h1"></path>
+                                </svg>
+                            </span>
+                            <div class="option-pill-info">
+                                <div class="option-pill-title" data-i18n="emp_biz_title">Business Owner</div>
+                                <div class="option-pill-desc" data-i18n="emp_biz_desc">Shop, commercial enterprise, trader, or manufacturer</div>
+                            </div>
+                            <span class="option-pill-check">✓</span>
+                        </div>
+                        <div class="option-pill-card" data-val="Contractor">
+                            <span class="option-pill-icon">
+                                <svg class="option-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                                </svg>
+                            </span>
+                            <div class="option-pill-info">
+                                <div class="option-pill-title" data-i18n="emp_indep_title">Self-Employed / Freelancer</div>
+                                <div class="option-pill-desc" data-i18n="emp_indep_desc">Contractual work, agency, or technical specialist</div>
+                            </div>
+                            <span class="option-pill-check">✓</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="app-employment" value="Salaried">
+                </div>
+
+                <div class="form-field">
+                    <label class="form-label" for="app-income" data-i18n="monthly_income_label">Monthly Income (In-Hand / Take-Home) *</label>
+                    <input type="number" id="app-income" class="curved-input font-mono text-large" placeholder="e.g. 85000" min="5000" step="1000" value="85000" required>
+                    <div class="quick-preset-row">
+                        <span class="field-hint" style="padding-left: 0;" data-i18n="quick_presets">Quick Presets:</span>
+                        <button type="button" class="preset-chip-btn income-preset-btn" data-val="45000">₹45,000</button>
+                        <button type="button" class="preset-chip-btn income-preset-btn" data-val="65000">₹65,000</button>
+                        <button type="button" class="preset-chip-btn income-preset-btn active" data-val="85000">₹85,000</button>
+                        <button type="button" class="preset-chip-btn income-preset-btn" data-val="120000">₹1,20,000</button>
+                        <button type="button" class="preset-chip-btn income-preset-btn" data-val="200000">₹2,00,000</button>
+                    </div>
+                </div>
+
+                <!-- Live Understandable Financial Income Working Box -->
+                <div class="understandable-working-card">
+                    <div class="working-card-header">
+                        <div class="working-title-flex">
+                            <span class="working-icon-badge">₹</span>
+                            <h4 class="working-title" data-i18n="income_working_title">Easy Monthly Income & Safe EMI Breakdown</h4>
+                        </div>
+                        <span class="working-pill-tag" data-i18n="foir_tag">SAFE LIMIT: 50%</span>
+                    </div>
+
+                    <div class="working-stats-grid">
+                        <div class="working-stat-item">
+                            <span class="working-stat-label" data-i18n="stat_in_hand_pay">Monthly Take-Home</span>
+                            <span class="working-stat-val" id="working-disp-income">₹85,000</span>
+                            <span class="working-stat-sub" data-i18n="stat_in_hand_sub">Monthly bank salary / earnings</span>
+                        </div>
+                        <div class="working-stat-item">
+                            <span class="working-stat-label" data-i18n="stat_living_buffer">Reserved for Family & Living (50%)</span>
+                            <span class="working-stat-val" id="working-disp-living">₹42,500</span>
+                            <span class="working-stat-sub" data-i18n="stat_living_sub">Protected for rent, food & savings</span>
+                        </div>
+                        <div class="working-stat-item">
+                            <span class="working-stat-label" data-i18n="stat_safe_emi">Maximum Safe EMI (50%)</span>
+                            <span class="working-stat-val text-emerald" id="working-disp-surplus">₹42,500</span>
+                            <span class="working-stat-sub" data-i18n="stat_safe_emi_sub">Highest safe monthly loan budget</span>
+                        </div>
+                        <div class="working-stat-item">
+                            <span class="working-stat-label" data-i18n="stat_yearly_income">Yearly Take-Home</span>
+                            <span class="working-stat-val" id="working-disp-annual">₹10,20,000</span>
+                            <span class="working-stat-sub" data-i18n="stat_yearly_sub">Total 12 months in-hand earnings</span>
+                        </div>
+                    </div>
+
+                    <div class="working-explainer-pod">
+                        <span><strong data-i18n="income_explainer_title">How this working protects you:</strong> <span data-i18n="income_explainer_desc">Banks follow a simple 50% safety rule. If you earn ₹85,000 every month, ₹42,500 is reserved untouched for your rent, family groceries, and children's education. The remaining ₹42,500 is your safe limit for all loan payments combined.</span></span>
+                    </div>
+                </div>
+
+                <!-- Instant Document Upload & Statement OCR Verification -->
+                <div class="form-field doc-upload-wrap" style="margin-top: 1.5rem;">
+                    <label class="form-label" style="display:flex; justify-content:space-between; align-items:center;">
+                        <span data-i18n="doc_upload_title">Income Proof Verification (Bank Statement / Payslip) *</span>
+                        <span class="ocr-tag-pill">AUTO-OCR VERIFIED</span>
+                    </label>
+                    <div class="doc-dropzone" id="statement-dropzone" onclick="triggerStatementFileInput()">
+                        <input type="file" id="statement-file-input" accept=".pdf,.png,.jpg,.jpeg,.csv" style="display:none;" onchange="handleStatementFileChosen(event)">
+                        
+                        <div class="dropzone-idle" id="dropzone-idle-state">
+                            <div class="dropzone-icon-circle">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                            </div>
+                            <div class="dropzone-info">
+                                <div class="dropzone-title">Upload Latest 3-Month Bank Statement or Salary Slip</div>
+                                <div class="dropzone-subtitle">Click to browse or drop file (PDF, PNG, JPG, CSV up to 15MB) • Instant Salary & Balance OCR Match</div>
+                            </div>
+                            <button type="button" class="btn-browse-chip" onclick="event.stopPropagation(); triggerStatementFileInput();">Browse Document</button>
+                        </div>
+
+                        <div class="dropzone-scanning" id="dropzone-scanning-state" style="display:none;">
+                            <div class="scanning-spinner-ring"></div>
+                            <div class="scanning-msg">
+                                <div style="font-weight: 700; font-size: 13.5px; color: #1e3a8a;">Analyzing Statement & Checking Salary Credits...</div>
+                                <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">Extracting NSDL-linked account cashflow and recurring employer credits</div>
+                            </div>
+                            <div class="scanning-progress-track">
+                                <div class="scanning-progress-bar" id="statement-progress-bar"></div>
+                            </div>
+                        </div>
+
+                        <div class="dropzone-verified" id="dropzone-verified-state" style="display:none;">
+                            <div class="verified-icon-circle">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                            </div>
+                            <div class="verified-meta-box">
+                                <div class="verified-filename" id="verified-doc-name">HDFC_Bank_Salary_Statement_Q3_2026.pdf</div>
+                                <div class="verified-subtitle" id="verified-doc-status">
+                                    <span>Verified</span> • Salary credits match: <strong>₹85,000 / mo</strong> • Average balance: <strong>₹1,42,800</strong>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-remove-doc" onclick="event.stopPropagation(); removeUploadedStatement();" title="Remove Document">✕</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wizard-nav-row">
+                    <button type="button" class="btn-pill-secondary btn-prev-step" data-prev="1">
+                        <span data-i18n="btn_back_to_identity">← Back to Your Details</span>
+                    </button>
+                    <button type="button" class="btn-pill-primary btn-next-step" data-next="3">
+                        <span data-i18n="btn_continue_to_loan">Next: Loan Amount & EMI →</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PAGE 3: Loan Requirement & Understandable EMI Working -->
+            <div class="wizard-page" id="page-step-3">
+                <div class="wizard-page-header">
+                    <div>
+                        <h2 class="wizard-page-title">
+                            <span data-i18n="page_3_heading">Step 3 of 4 • Loan Amount & Monthly EMI</span>
+                        </h2>
+                        <p class="card-desc-curved" data-i18n="page_3_desc">Choose the loan amount you need and how many months you want to repay. See your exact monthly EMI instantly.</p>
+                    </div>
+                    <span class="wizard-page-badge" data-i18n="page_3_badge">STEP 3 • LOAN & EMI</span>
+                </div>
+
+                <!-- Modern Flowing Purpose Tag Chips with Clean SVG Icons -->
+                <div class="form-field">
+                    <label class="form-label" data-i18n="purpose_label">Why Do You Need This Loan? *</label>
+                    <div class="purpose-chips-flow" id="purpose-options">
+                        <button type="button" class="purpose-pill-btn active" data-val="Personal / General Purpose">
+                            <svg class="purpose-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                <line x1="1" y1="10" x2="23" y2="10"></line>
+                            </svg>
+                            <span data-i18n="purp_personal">Personal Expenses</span>
+                        </button>
+                        <button type="button" class="purpose-pill-btn" data-val="Home Improvement">
+                            <svg class="purpose-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                            <span data-i18n="purp_home">Home Renovation</span>
+                        </button>
+                        <button type="button" class="purpose-pill-btn" data-val="Business Expansion">
+                            <svg class="purpose-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                            </svg>
+                            <span data-i18n="purp_business">Business Growth</span>
+                        </button>
+                        <button type="button" class="purpose-pill-btn" data-val="Vehicle Purchase">
+                            <svg class="purpose-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="7" cy="17" r="2"></circle>
+                                <circle cx="17" cy="17" r="2"></circle>
+                                <path d="M5 17H3v-4l2-5h10l3 5v4h-2"></path>
+                                <line x1="9" y1="17" x2="15" y2="17"></line>
+                            </svg>
+                            <span data-i18n="purp_vehicle">Vehicle Purchase</span>
+                        </button>
+                        <button type="button" class="purpose-pill-btn" data-val="Debt Consolidation">
+                            <svg class="purpose-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="1 4 1 10 7 10"></polyline>
+                                <polyline points="23 20 23 14 17 14"></polyline>
+                                <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+                            </svg>
+                            <span data-i18n="purp_refinance">Close Other Loans</span>
+                        </button>
+                        <button type="button" class="purpose-pill-btn" data-val="Higher Education">
+                            <svg class="purpose-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                            </svg>
+                            <span data-i18n="purp_education">Higher Studies</span>
+                        </button>
+                    </div>
+                    <input type="hidden" id="app-purpose" value="Personal / General Purpose">
+                </div>
+
+                <div class="form-field">
+                    <label class="form-label" for="app-amount" data-i18n="loan_amount_label">Loan Amount Needed *</label>
+                    <input type="number" id="app-amount" class="curved-input font-mono text-large" placeholder="e.g. 500000" min="10000" max="10000000" step="25000" value="500000" required>
+                    <div class="quick-preset-row">
+                        <span class="field-hint" style="padding-left: 0;" data-i18n="quick_presets">Quick Presets:</span>
+                        <button type="button" class="preset-chip-btn amount-preset-btn" data-val="100000">₹1,00,000</button>
+                        <button type="button" class="preset-chip-btn amount-preset-btn" data-val="300000">₹3,00,000</button>
+                        <button type="button" class="preset-chip-btn amount-preset-btn active" data-val="500000">₹5,00,000</button>
+                        <button type="button" class="preset-chip-btn amount-preset-btn" data-val="1000000">₹10,00,000</button>
+                        <button type="button" class="preset-chip-btn amount-preset-btn" data-val="2000000">₹20,00,000</button>
+                    </div>
+                </div>
+
+                <!-- Modern Segmented Pill Tenure Selector -->
+                <div class="form-field">
+                    <label class="form-label" data-i18n="tenure_label">How Long Do You Want To Repay? *</label>
+                    <div class="tenor-segmented-group" id="tenor-options">
+                        <button type="button" class="tenor-chip" data-val="12">12M (1Y)</button>
+                        <button type="button" class="tenor-chip" data-val="24">24M (2Y)</button>
+                        <button type="button" class="tenor-chip active" data-val="36">36M (3Y)</button>
+                        <button type="button" class="tenor-chip" data-val="48">48M (4Y)</button>
+                        <button type="button" class="tenor-chip" data-val="60">60M (5Y)</button>
+                        <button type="button" class="tenor-chip" data-val="84">84M (7Y)</button>
+                    </div>
+                    <input type="hidden" id="app-tenor" value="36">
+                </div>
+
+                <!-- Live Understandable Loan & Repayment Working Box -->
+                <div class="understandable-working-card">
+                    <div class="working-card-header">
+                        <div class="working-title-flex">
+                            <span class="working-icon-badge">%</span>
+                            <h4 class="working-title" data-i18n="emi_working_title">Your Monthly EMI & Total Cost Working</h4>
+                        </div>
+                        <span class="working-pill-tag" data-i18n="benchmark_tag">LOWEST RATE: 8.50% P.A.</span>
+                    </div>
+
+                    <div class="working-stats-grid">
+                        <div class="working-stat-item">
+                            <span class="working-stat-label" data-i18n="stat_principal">Loan Amount</span>
+                            <span class="working-stat-val" id="working-disp-amount">₹5,00,000</span>
+                            <span class="working-stat-sub" data-i18n="stat_principal_sub">Money credited to your account</span>
+                        </div>
+                        <div class="working-stat-item">
+                            <span class="working-stat-label" data-i18n="stat_emi">Your Monthly EMI</span>
+                            <span class="working-stat-val text-emerald" id="working-disp-emi">₹15,785 / mo</span>
+                            <span class="working-stat-sub" data-i18n="stat_emi_sub">Monthly payment at 8.5% rate</span>
+                        </div>
+                        <div class="working-stat-item">
+                            <span class="working-stat-label" data-i18n="stat_interest">Total Interest Cost</span>
+                            <span class="working-stat-val" id="working-disp-interest">₹68,260</span>
+                            <span class="working-stat-sub" data-i18n="stat_interest_sub">Bank interest charge over entire tenure</span>
+                        </div>
+                        <div class="working-stat-item">
+                            <span class="working-stat-label" data-i18n="stat_total_pay">Total Amount You Pay Back</span>
+                            <span class="working-stat-val" id="working-disp-total">₹5,68,260</span>
+                            <span class="working-stat-sub" data-i18n="stat_total_pay_sub">Loan principal + Interest combined</span>
+                        </div>
+                    </div>
+
+                    <div class="working-explainer-pod" style="flex-direction: column; gap: 0.4rem;">
+                        <div><strong data-i18n="affordability_title">Monthly Budget Check:</strong> <span id="working-disp-affordability">This monthly EMI of ₹15,785 uses only 18.6% of your monthly take-home pay, comfortably below your ₹42,500 maximum safe limit.</span></div>
+                        <div><strong data-i18n="retirement_check_title">Retirement Check:</strong> <span id="working-disp-runway-check">You will finish paying this 36-month loan at age 37, safely 21 years before your sector retirement age of 58.</span></div>
+                    </div>
+                </div>
+
+                <div class="wizard-nav-row">
+                    <button type="button" class="btn-pill-secondary btn-prev-step" data-prev="2">
+                        <span data-i18n="btn_back_to_income">← Back to Monthly Income</span>
+                    </button>
+                    <button type="button" class="btn-pill-primary btn-next-step" data-next="4">
+                        <span data-i18n="btn_continue_to_credit">Next: Previous Loans Record →</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PAGE 4: Past Credit Facilities & Bureau Repayment Record -->
+            <div class="wizard-page" id="page-step-4">
+                <div class="wizard-page-header">
+                    <div>
+                        <h2 class="wizard-page-title">
+                            <span data-i18n="page_4_heading">Step 4 of 4 • Previous Loans & Credit History</span>
+                        </h2>
+                        <p class="card-desc-curved" data-i18n="page_4_desc">Do you have any ongoing or past loans? Timely payments improve your CIBIL score and get you lower interest rates.</p>
+                    </div>
+                    <span class="wizard-page-badge" data-i18n="page_4_badge">STEP 4 • CREDIT RECORD</span>
+                </div>
+
+                <!-- First Time vs Existing Borrower Quick Selection -->
+                <div class="credit-history-toggle-grid">
+                    <div class="option-pill-card active" id="toggle-clean-borrower">
+                        <span class="option-pill-icon">
+                            <svg class="option-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 14 14"></polyline>
+                            </svg>
+                        </span>
+                        <div class="option-pill-info">
+                            <div class="option-pill-title" data-i18n="toggle_clean_title">First-Time Borrower (No Other Loans)</div>
+                            <div class="option-pill-desc" data-i18n="toggle_clean_desc">I have no other active or prior loans</div>
+                        </div>
+                        <span class="option-pill-check">✓</span>
+                    </div>
+                    <div class="option-pill-card" id="toggle-existing-borrower">
+                        <span class="option-pill-icon">
+                            <svg class="option-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </span>
+                        <div class="option-pill-info">
+                            <div class="option-pill-title" data-i18n="toggle_existing_title">I Have Existing or Past Loans</div>
+                            <div class="option-pill-desc" data-i18n="toggle_existing_desc">Add your previous loans to check payment history</div>
+                        </div>
+                        <span class="option-pill-check">✓</span>
+                    </div>
+                </div>
+
+                <!-- Sub-Card: Past Loan Records & Repayment History -->
+                <div id="past-loans-container" style="display: none;">
+                    <div class="sub-header-flex" style="margin-bottom: 0.75rem;">
+                        <div>
+                            <h3 class="sub-card-title" data-i18n="declared_facilities_title">Your Previous Loans List</h3>
+                            <p class="card-desc-curved" style="font-size: 0.74rem;" data-i18n="declared_facilities_desc">Add previous loans to verify on-time repayment status.</p>
+                        </div>
+                        <button type="button" class="btn-pill-secondary" id="btn-add-past-loan" data-i18n="btn_add_loan">+ Add Another Loan</button>
+                    </div>
+
+                    <div class="table-curved-wrap">
+                        <table class="bank-curved-table" id="past-loans-table">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="th_lender">Bank Name</th>
+                                    <th data-i18n="th_type">Loan Type</th>
+                                    <th data-i18n="th_sanctioned">Amount Borrowed (₹)</th>
+                                    <th data-i18n="th_outstanding">Current Balance (₹)</th>
+                                    <th data-i18n="th_emi">Monthly EMI (₹)</th>
+                                    <th data-i18n="th_status">Repayment Track Record</th>
+                                    <th data-i18n="th_action">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="past-loans-tbody">
+                                <!-- Injected dynamically, starts with clean empty state -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="working-explainer-pod">
+                    <span id="credit-logic-pod"><strong data-i18n="credit_logic_title">How Credit Score Works:</strong> <span data-i18n="credit_logic_desc">When you submit, we verify your past repayments. Paying EMIs on time (0 days delay) gives you an Excellent CIBIL score and unlocks our lowest 8.50% interest rate.</span></span>
+                </div>
+
+                <!-- Submit Application Navigation Row -->
+                <div class="wizard-nav-row">
+                    <button type="button" class="btn-pill-secondary btn-prev-step" data-prev="3">
+                        <span data-i18n="btn_back_to_loan">← Back to Loan Requirements</span>
+                    </button>
+                    <button type="button" id="btn-submit-app" class="btn-pill-large" style="width: auto; padding: 0.95rem 2.85rem;" onclick="submitApplication();">
+                        <span id="btn-submit-text" data-i18n="btn_submit_app">Send Loan Sanction Request →</span>
+                    </button>
+                </div>
+            </div>
+
+        </form>
+
+        <!-- SECTION 2A: Applicant Acknowledgement Receipt (Regular User View) -->
+        <section class="bank-curved-card result-card-animated" id="user-receipt-panel" style="display: none;">
+            <div class="card-header-curved">
+                <div>
+                    <h2 class="card-title-curved" data-i18n="receipt_title">Application Submission Acknowledged</h2>
+                    <p class="card-desc-curved" data-i18n="receipt_desc">Your loan file has been logged into our centralized loan origination system for underwriting appraisal.</p>
+                </div>
+                <div class="panel-actions">
+                    <span class="pill-ref-badge" id="user-ans-ref">REF: TLB-2026-SUBMISSION</span>
+                </div>
+            </div>
+
+            <!-- Customer Receipt Status Hero Banner -->
+            <div class="decision-pill-banner decision-user-review">
+                <div class="decision-pill-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="decision-pill-content">
+                    <div class="decision-label" id="user-receipt-title" data-i18n="receipt_hero_title">APPLICATION DOSSIER UNDER OFFICIAL APPRAISAL</div>
+                    <div class="decision-sub" id="user-receipt-sub" data-i18n="receipt_hero_sub">Your dossier is assigned to our Retail Credit Underwriting Desk. Internal risk rating & sanction memo generation are restricted to authorized officers.</div>
+                </div>
+                <span class="decision-badge-pill badge-review" id="user-receipt-badge" data-i18n="receipt_hero_badge">UNDER REVIEW</span>
+            </div>
+
+            <!-- Applicant Key Summary Pods -->
+            <div class="curved-metrics-deck">
+                <div class="curved-metric-pod highlight-pod">
+                    <div class="pod-icon-circle">₹</div>
+                    <div class="pod-label" data-i18n="receipt_requested_facility">REQUESTED LOAN FACILITY</div>
+                    <div class="pod-val text-emerald" id="user-ans-amount">—</div>
+                    <div class="pod-sub" data-i18n="receipt_facility_sub">Facility Principal Applied</div>
+                </div>
+
+                <div class="curved-metric-pod">
+                    <div class="pod-icon-circle">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <div class="pod-label" data-i18n="receipt_tenure">REPAYMENT DURATION</div>
+                    <div class="pod-val" id="user-ans-tenor">—</div>
+                    <div class="pod-sub" data-i18n="receipt_tenure_sub">Equated Monthly Installments</div>
+                </div>
+
+                <div class="curved-metric-pod">
+                    <div class="pod-icon-circle">₹</div>
+                    <div class="pod-label" data-i18n="receipt_est_emi">INDICATIVE MONTHLY EMI</div>
+                    <div class="pod-val font-mono" id="user-ans-emi">—</div>
+                    <div class="pod-sub" data-i18n="receipt_emi_sub">Subject to final underwriting</div>
+                </div>
+
+                <div class="curved-metric-pod">
+                    <div class="pod-icon-circle">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                    </div>
+                    <div class="pod-label" data-i18n="receipt_work_runway">EMPLOYMENT & SERVICE RUNWAY</div>
+                    <div class="pod-val" id="user-ans-sector">—</div>
+                    <div class="pod-sub" id="user-ans-runway">—</div>
+                </div>
+            </div>
+
+            <!-- Regulatory & Underwriting Notice Box -->
+            <div class="user-notice-pod">
+                <div class="user-notice-header">
+                    <span class="user-notice-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block; vertical-align:middle;">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                    </span>
+                    <strong data-i18n="receipt_notice_title">Internal Underwriting & Confidentiality Notice</strong>
+                </div>
+                <p class="user-notice-body" data-i18n="receipt_notice_body">
+                    In compliance with the Reserve Bank of India Fair Lending Practice, granular credit scoring parameters, quantitative risk matrices (e.g. Tier A1 Prime / Automated Solvency classifications), and internal sanction/rejection memos are appraised exclusively by authorized Underwriting Officers. Your dedicated Branch Relationship Manager will notify you via SMS/Email within 24 business hours.
+                </p>
+            </div>
+
+            <!-- Actions Bar for Applicant -->
+            <div class="result-actions-bar" id="applicant-actions-bar">
+                <button type="button" class="btn-pill-primary" id="btn-send-sanction-request" onclick="handleSendSanctionRequest()">
+                    <span id="send-request-text" style="display:inline-flex; align-items:center; gap:6px;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                        Send Loan Sanction Request
+                    </span>
+                </button>
+                <button type="button" class="btn-pill-primary" id="btn-applicant-disburse" style="display:none; background: linear-gradient(135deg, #059669 0%, #10b981 100%); border-color: #059669;" onclick="openDisbursalModal()">
+                    <span style="display:inline-flex; align-items:center; gap:6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                        Digital E-Sign & Instant Disbursal
+                    </span>
+                </button>
+                <a id="btn-applicant-download-memo" class="btn-pill-secondary" style="display:none; text-decoration:none;" target="_blank" href="#">
+                    <span style="display:inline-flex; align-items:center; gap:6px;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Download Official Sanction Letter (PDF)
+                    </span>
+                </a>
+                <button type="button" class="btn-pill-secondary" onclick="window.print()" data-i18n="btn_print_receipt">
+                    Print Customer Receipt
+                </button>
+            </div>
+
+            <!-- Disbursal IMPS Success Notification Banner -->
+            <div id="disbursal-success-banner" style="display:none; margin-top: 1.5rem; background: #ecfdf5; border: 1.5px solid #10b981; border-radius: 14px; padding: 1.25rem 1.5rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <div style="width:40px; height:40px; border-radius:50%; background:#10b981; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px;">✓</div>
+                        <div>
+                            <div style="font-size:14px; font-weight:800; color:#065f46;">LOAN FACILITY DISBURSED • FUNDS CREDITED</div>
+                            <div style="font-size:12.5px; color:#047857; margin-top:2px;">Transferred via IMPS 24x7 to Bank A/C. Reference UTR: <strong id="disbursal-utr-code" class="font-mono">—</strong></div>
+                        </div>
+                    </div>
+                    <span style="background:#047857; color:#fff; font-size:11px; font-weight:800; padding:5px 12px; border-radius:20px;">IMPS PROCESSED</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2B: Instant Underwriting Answer & Sculpted Sanction Memo (Underwriter Desk Only) -->
+        <section class="bank-curved-card result-card-animated" id="sanction-result-panel" style="display: none;">
+            <div class="card-header-curved">
+                <div>
+                    <h2 class="card-title-curved" data-i18n="memo_title">Official Loan Sanction Letter</h2>
+                    <p class="card-desc-curved" data-i18n="memo_desc">Instant credit decision based on your monthly income, retirement age, and repayment track record.</p>
+                </div>
+                <div class="panel-actions">
+                    <span class="pill-ref-badge" id="ans-ref" data-i18n="ref_awaiting">REF: AWAITING SUBMISSION</span>
+                </div>
+            </div>
+
+            <!-- Sculpted Pill Decision Hero Banner -->
+            <div id="ans-decision-banner" class="decision-pill-banner decision-pending">
+                <div class="decision-pill-icon" id="ans-icon-circle">?</div>
+                <div class="decision-pill-content">
+                    <div class="decision-label" id="ans-title" data-i18n="ans_pending_title">AWAITING APPLICATION SUBMISSION</div>
+                    <div class="decision-sub" id="ans-tier" data-i18n="ans_pending_sub">Complete the simple steps above to check your instant loan sanction.</div>
+                </div>
+                <span class="decision-badge-pill" id="ans-badge" data-i18n="badge_ready">READY</span>
+            </div>
+
+            <!-- Circular Gauges & Key Metrics Deck -->
+            <div class="curved-metrics-deck">
+                
+                <!-- Circular CIBIL Radial Meter Card -->
+                <div class="curved-metric-pod gauge-pod">
+                    <div class="circular-meter-wrap">
+                        <svg class="circular-svg" viewBox="0 0 140 140">
+                            <circle class="circular-bg" cx="70" cy="70" r="56"></circle>
+                            <circle id="cibil-progress-ring" class="circular-fill" cx="70" cy="70" r="56"></circle>
+                        </svg>
+                        <div class="circular-center">
+                            <span class="circular-score-val" id="ans-cibil">—</span>
+                            <span class="circular-score-max">/ 900</span>
+                        </div>
+                    </div>
+                    <div class="circular-meta">
+                        <div class="circular-grade-pill" id="ans-cibil-grade">Awaiting Verification</div>
+                        <div class="circular-pod-title" data-i18n="cibil_gauge_title">TransUnion CIBIL Score</div>
+                    </div>
+                </div>
+
+                <!-- Circular Debt-to-Income (DTI) Meter Card -->
+                <div class="curved-metric-pod gauge-pod">
+                    <div class="circular-meter-wrap">
+                        <svg class="circular-svg" viewBox="0 0 140 140">
+                            <circle class="circular-bg" cx="70" cy="70" r="56"></circle>
+                            <circle id="dti-progress-ring" class="circular-fill dti-fill" cx="70" cy="70" r="56"></circle>
+                        </svg>
+                        <div class="circular-center">
+                            <span class="circular-score-val" id="ans-dti">—</span>
+                            <span class="circular-score-max">DTI</span>
+                        </div>
+                    </div>
+                    <div class="circular-meta">
+                        <div class="circular-grade-pill" id="ans-dti-badge">Safe EMI Limit</div>
+                        <div class="circular-pod-title" data-i18n="dti_gauge_title">Monthly EMI Burden (DTI)</div>
+                    </div>
+                </div>
+
+                <!-- Sanctioned Amount Pill Pod -->
+                <div class="curved-metric-pod highlight-pod">
+                    <div class="pod-icon-circle">₹</div>
+                    <div class="pod-label" data-i18n="card_sanctioned_amount">SANCTIONED LOAN AMOUNT</div>
+                    <div class="pod-val text-emerald" id="ans-amount">—</div>
+                    <div class="pod-sub" id="ans-amount-sub">Awaiting appraisal</div>
+                </div>
+
+                <!-- Interest Rate & EMI Pill Pod -->
+                <div class="curved-metric-pod">
+                    <div class="pod-icon-circle">%</div>
+                    <div class="pod-label" data-i18n="card_approved_rate">APPROVED INTEREST RATE & EMI</div>
+                    <div class="pod-val" id="ans-rate">—</div>
+                    <div class="pod-sub font-mono" id="ans-emi">—</div>
+                </div>
+            </div>
+
+            <!-- Repayment & Superannuation Audit Capsule Strip -->
+            <div class="curved-audit-capsule">
+                <div class="audit-col">
+                    <span class="capsule-label" data-i18n="col_borrower">BORROWER & AGE</span>
+                    <strong class="capsule-val" id="ans-applicant">—</strong>
+                    <span class="capsule-sub">PAN: <span id="ans-pan">—</span> | Age: <span id="ans-age">—</span> Yrs</span>
+                </div>
+                <div class="audit-col">
+                    <span class="capsule-label" data-i18n="col_sector_runway">JOB SECTOR & RETIREMENT</span>
+                    <strong class="capsule-val" id="ans-sector">—</strong>
+                    <span class="capsule-sub" id="ans-runway">—</span>
+                </div>
+                <div class="audit-col">
+                    <span class="capsule-label" data-i18n="col_approved_tenor">LOAN DURATION</span>
+                    <strong class="capsule-val" id="ans-tenor">—</strong>
+                    <span class="capsule-sub" id="ans-maturity-sub">Equated Monthly Installments</span>
+                </div>
+                <div class="audit-col">
+                    <span class="capsule-label" data-i18n="col_past_record">PAST REPAYMENT RECORD</span>
+                    <strong class="capsule-val" id="ans-repay-summary">—</strong>
+                    <span class="capsule-sub" id="ans-npa-flag">—</span>
+                </div>
+                <div class="audit-col">
+                    <span class="capsule-label" data-i18n="col_sanction_date">APPROVAL DATE</span>
+                    <strong class="capsule-val" id="ans-date">—</strong>
+                    <span class="capsule-sub">Valid for 30 calendar days</span>
+                </div>
+            </div>
+
+            <!-- Underwriter Credit Appraisal Remarks -->
+            <div class="curved-remarks-pod">
+                <h4 class="remarks-title" data-i18n="remarks_title">Key Underwriting Observations & Policy Decisions</h4>
+                <ul class="curved-remarks-list" id="ans-remarks-list">
+                    <li style="color: var(--text-muted);">Application will be analyzed against credit bureau history, past repayment records, and debt service coverage upon submission.</li>
+                </ul>
+            </div>
+
+            <!-- Actions Bar -->
+            <div class="result-actions-bar" id="result-actions-wrap" style="display: none;">
+                <a id="btn-admin-download-memo" class="btn-pill-primary" style="text-decoration:none;" target="_blank" href="#">
+                    <span style="display:inline-flex; align-items:center; gap:6px;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Download Official Letterhead Memo (PDF)
+                    </span>
+                </a>
+                <button type="button" class="btn-pill-secondary" onclick="window.print()" data-i18n="btn_print">
+                    Print / Save Official Sanction Letter
+                </button>
+            </div>
+        </section>
+
+        </div><!-- /#applicant-portal-view -->
+
+        <!-- ═══════════════════════════════════════════════════════
+             ADMIN / UNDERWRITER PORTAL (Dedicated Institutional Desk)
+             ═══════════════════════════════════════════════════════ -->
+        <div id="admin-underwriter-portal" style="display: none;">
+            <!-- Institutional Header Bar -->
+            <div class="admin-desk-header">
+                <div class="admin-header-left">
+                    <div class="admin-badge-emblem">
+                        <span class="admin-emblem-text">TLB</span>
+                        <span class="admin-status-live-pulse"></span>
+                    </div>
+                    <div>
+                        <div class="admin-desk-title">Institutional Credit Underwriting Desk</div>
+                        <div class="admin-desk-sub">ADMIN TERMINAL • AUTOMATED CREDIT RISK APPRAISAL PIPELINE</div>
+                    </div>
+                </div>
+                <div class="admin-header-stats">
+                    <div class="admin-stat-item">
+                        <span class="admin-stat-label">TOTAL QUEUE</span>
+                        <span class="admin-stat-val" id="stat-total-apps">0</span>
+                    </div>
+                    <div class="admin-stat-item stat-pending">
+                        <span class="admin-stat-label">PENDING REVIEW</span>
+                        <span class="admin-stat-val text-amber" id="stat-pending-apps">0</span>
+                    </div>
+                    <div class="admin-stat-item stat-sanctioned">
+                        <span class="admin-stat-label">SANCTIONED</span>
+                        <span class="admin-stat-val text-emerald" id="stat-sanctioned-apps">0</span>
+                    </div>
+                    <div class="admin-stat-item stat-declined">
+                        <span class="admin-stat-label">DECLINED</span>
+                        <span class="admin-stat-val text-rose" id="stat-declined-apps">0</span>
+                    </div>
+                </div>
+                <div class="admin-header-actions">
+                    <button type="button" class="btn-desk-action" id="btn-admin-refresh-queue" onclick="loadAdminApplicationsQueue()" title="Refresh Application Queue">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="icon-refresh-queue">
+                            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                        </svg>
+                        <span>Refresh Queue</span>
+                    </button>
+                    <button type="button" class="btn-desk-action btn-desk-lock" onclick="signOutBankUser()" title="Securely Lock Terminal and Sign Out of Desk">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <span>Lock Terminal</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Two-Column Master-Detail Layout -->
+            <div class="admin-desk-grid">
+                <!-- Left Column: Applications Queue (36%) -->
+                <div class="admin-queue-card">
+                    <div class="queue-card-header">
+                        <div class="queue-title-row">
+                            <span class="queue-title">Incoming Applications Queue</span>
+                            <span class="queue-count-pill" id="queue-count-display">0 Applications</span>
+                        </div>
+                        <div class="queue-filter-tabs">
+                            <button type="button" class="queue-tab active" data-filter="ALL" onclick="setQueueFilter('ALL')">All</button>
+                            <button type="button" class="queue-tab" data-filter="PENDING_REVIEW" onclick="setQueueFilter('PENDING_REVIEW')">Pending</button>
+                            <button type="button" class="queue-tab" data-filter="SANCTIONED" onclick="setQueueFilter('SANCTIONED')">Sanctioned</button>
+                            <button type="button" class="queue-tab" data-filter="REJECTED" onclick="setQueueFilter('REJECTED')">Declined</button>
+                        </div>
+                        <div class="queue-search-wrap">
+                            <input type="text" id="admin-queue-search" class="queue-search-input" placeholder="Search by name, ref ID, or PAN..." oninput="filterQueueList()">
+                        </div>
+                    </div>
+                    <div class="queue-items-container" id="admin-queue-list">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- Right Column: Credit Dossier & Automated Appraisal (64%) -->
+                <div class="admin-dossier-card" id="admin-dossier-card">
+                    <div id="admin-dossier-empty" style="display:none;" class="dossier-empty-state">
+                        <div class="dossier-empty-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                        </div>
+                        <h3>Select an Application Dossier</h3>
+                        <p>Click on any incoming loan application in the left queue to inspect credit files, review automated risk assessments, and issue institutional determinations.</p>
+                    </div>
+
+                    <div id="admin-dossier-content" class="dossier-active-content">
+                        <!-- Top Identity & Status Ribbon -->
+                        <div class="dossier-ribbon">
+                            <div class="dossier-ribbon-left">
+                                <span class="dossier-ref-tag" id="dossier-ref-badge">TLB-LON-2026-84920</span>
+                                <h2 class="dossier-applicant-name" id="dossier-applicant-name">Rahul Sharma</h2>
+                                <div class="dossier-meta-chips">
+                                    <span class="dossier-chip">PAN: <strong id="dossier-pan">ABCDE1234F</strong></span>
+                                    <span class="dossier-chip">A/C: <strong id="dossier-acc">100928374651</strong></span>
+                                    <span class="dossier-chip">Age: <strong id="dossier-age">34 Yrs</strong></span>
+                                    <span class="dossier-chip">Income: <strong id="dossier-income">₹85,000 / mo</strong></span>
+                                    <span class="dossier-chip">KYC: <strong class="text-emerald" id="dossier-kyc">VERIFIED</strong></span>
+                                </div>
+                            </div>
+                            <div class="dossier-ribbon-right">
+                                <div id="dossier-status-pill" class="status-pill-underwrite status-pending">PENDING UNDERWRITING REVIEW</div>
+                                <div class="dossier-time" id="dossier-time">September 25, 2026 14:32 IST</div>
+                            </div>
+                        </div>
+
+                        <!-- Modern Dossier Tab Navigation Bar (3 Clean Institutional Phases) -->
+                        <div class="dossier-nav-tabs" role="tablist">
+                            <button type="button" class="dossier-nav-tab active" id="tab-btn-facility" onclick="switchDossierTab('facility')" role="tab" aria-selected="true">
+                                <span class="dossier-tab-step">01</span>
+                                <span class="dossier-tab-title">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block; vertical-align:middle; margin-right:4px;">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    </svg>
+                                    Facility &amp; Runway
+                                </span>
+                            </button>
+                            <button type="button" class="dossier-nav-tab" id="tab-btn-bureau" onclick="switchDossierTab('bureau')" role="tab" aria-selected="false">
+                                <span class="dossier-tab-step">02</span>
+                                <span class="dossier-tab-title">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block; vertical-align:middle; margin-right:4px;">
+                                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                                    </svg>
+                                    Credit Bureau CIR
+                                </span>
+                            </button>
+                            <button type="button" class="dossier-nav-tab" id="tab-btn-determination" onclick="switchDossierTab('determination')" role="tab" aria-selected="false">
+                                <span class="dossier-tab-step">03</span>
+                                <span class="dossier-tab-title">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block; vertical-align:middle; margin-right:4px;">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                    </svg>
+                                    Official Determination
+                                </span>
+                            </button>
+                        </div>
+
+                        <!-- TAB PANE 1: Facility & Superannuation Runway -->
+                        <div class="dossier-tab-pane active" id="dossier-pane-facility">
+                            <div class="dossier-section-card">
+                                <div class="dossier-sec-header">
+                                    <div class="sec-dot"></div>
+                                    <span class="sec-title">REQUESTED CREDIT FACILITY &amp; SUPERANNUATION RUNWAY</span>
+                                </div>
+                                <div class="dossier-grid-4">
+                                    <div class="dossier-metric-box">
+                                        <span class="box-lbl">REQUESTED PRINCIPAL</span>
+                                        <span class="box-val text-brand" id="dossier-req-amount">₹5,00,000</span>
+                                        <span class="box-sub" id="dossier-purpose">Home Renovation</span>
+                                    </div>
+                                    <div class="dossier-metric-box">
+                                        <span class="box-lbl">REQUESTED TENURE</span>
+                                        <span class="box-val" id="dossier-req-tenor">36 Months</span>
+                                        <span class="box-sub">Equated Monthly Amortization</span>
+                                    </div>
+                                    <div class="dossier-metric-box">
+                                        <span class="box-lbl">ESTIMATED MONTHLY EMI</span>
+                                        <span class="box-val font-mono" id="dossier-req-emi">₹15,780 / mo</span>
+                                        <span class="box-sub" id="dossier-foir-pct">18.6% of Monthly Income (Safe)</span>
+                                    </div>
+                                    <div class="dossier-metric-box">
+                                        <span class="box-lbl">SECTOR &amp; RETIREMENT RUNWAY</span>
+                                        <span class="box-val text-emerald" id="dossier-runway-years">24 Yrs Runway</span>
+                                        <span class="box-sub" id="dossier-sector-name">Private Corporate (Ret: 58 Yrs)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dossier-tab-footer">
+                                <span class="dossier-tab-footer-hint">Phase 1 of 3 • Facility parameters &amp; sector runway check</span>
+                                <button type="button" class="btn-dossier-nav-btn next" onclick="switchDossierTab('bureau')">
+                                    <span>Proceed to Credit Bureau CIR →</span>
+                                </button>
+                            </div>
+                        </div><!-- /#dossier-pane-facility -->
+
+                        <!-- TAB PANE 2: Credit Bureau CIR Analysis & Past Repayment -->
+                        <div class="dossier-tab-pane" id="dossier-pane-bureau" style="display: none;">
+                            <div class="dossier-section-card">
+                                <div class="dossier-sec-header">
+                                    <div class="sec-dot"></div>
+                                    <span class="sec-title">CREDIT BUREAU CIR &amp; DECLARED REPAYMENT TRACK RECORD</span>
+                                </div>
+                                <div class="dossier-grid-4" style="margin-bottom: 0.85rem;">
+                                    <div class="dossier-metric-box">
+                                        <span class="box-lbl">CIBIL SCORE &amp; GRADE</span>
+                                        <span class="box-val text-emerald" id="dossier-cibil-score">785</span>
+                                        <span class="box-sub" id="dossier-cibil-grade">Prime Tier A (Punctual)</span>
+                                    </div>
+                                    <div class="dossier-metric-box">
+                                        <span class="box-lbl">REVOLVING LINE UTILIZATION</span>
+                                        <span class="box-val" id="dossier-util-pct">22.5%</span>
+                                        <span class="box-sub" id="dossier-util-sub">Well below 50% risk threshold</span>
+                                    </div>
+                                    <div class="dossier-metric-box">
+                                        <span class="box-lbl">DELINQUENCY CYCLES</span>
+                                        <span class="box-val text-emerald" id="dossier-dpd-counts">0 Delays / 0 NPA</span>
+                                        <span class="box-sub" id="dossier-dpd-sub">100% Punctual Repayment</span>
+                                    </div>
+                                    <div class="dossier-metric-box">
+                                        <span class="box-lbl">EXISTING OUTSTANDING DEBT</span>
+                                        <span class="box-val font-mono" id="dossier-total-debt">₹45,000</span>
+                                        <span class="box-sub" id="dossier-existing-emi">Existing EMI: ₹6,500 / mo</span>
+                                    </div>
+                                </div>
+                                <!-- Declared Loans Table -->
+                                <div class="table-responsive-curved">
+                                    <table class="admin-dossier-table">
+                                        <thead>
+                                             <tr>
+                                                 <th>Lender Institution</th>
+                                                 <th>Facility Type</th>
+                                                 <th>Sanctioned</th>
+                                                 <th>Current Outstanding</th>
+                                                 <th>Monthly EMI</th>
+                                                 <th>Repayment Track Record</th>
+                                             </tr>
+                                         </thead>
+                                         <tbody id="dossier-loans-tbody">
+                                             <!-- Rendered by JS -->
+                                         </tbody>
+                                     </table>
+                                 </div>
+                             </div>
+                             <div class="dossier-tab-footer">
+                                 <button type="button" class="btn-dossier-nav-btn prev" onclick="switchDossierTab('facility')">
+                                     <span>← Back: Facility &amp; Runway</span>
+                                 </button>
+                                 <button type="button" class="btn-dossier-nav-btn next" onclick="switchDossierTab('determination')">
+                                     <span>Proceed to Official Determination →</span>
+                                 </button>
+                             </div>
+                         </div><!-- /#dossier-pane-bureau -->
+
+                        <!-- TAB PANE 3: Human-in-the-Loop Official Underwriter Determination (With Background Risk Appraisal) -->
+                        <div class="dossier-tab-pane" id="dossier-pane-determination" style="display: none;">
+                            <div class="dossier-section-card admin-determination-card">
+                                <div class="dossier-sec-header">
+                                    <div class="sec-dot" style="background: var(--brand-accent);"></div>
+                                    <span class="sec-title">OFFICIAL CREDIT UNDERWRITER DETERMINATION</span>
+                                </div>
+
+                                <!-- Background Automated Risk Appraisal Recommendation Banner -->
+                                <div class="qsvm-recommendation-banner" id="dossier-qsvm-rec-box" style="margin-bottom: 1.25rem;">
+                                    <div class="rec-banner-badge" id="dossier-qsvm-rec-badge">RECOMMENDED: APPROVE</div>
+                                    <div class="rec-banner-text">
+                                        <h4 class="rec-banner-title" id="dossier-qsvm-rec-title">Appraisal Recommendation: ELIGIBLE FOR IN-PRINCIPLE SANCTION</h4>
+                                        <p class="rec-banner-desc" id="dossier-qsvm-rec-desc">
+                                            Automated risk appraisal projects applicant profile deeply into prime, low-risk solvency band. Affordability and career runway confirm a strong safety margin.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <p class="determination-guidance">
+                                    Review the automated risk recommendation and issue the official institutional credit decision:
+                                </p>
+
+                                <!-- Decision Action Toggle -->
+                                <div class="determination-toggle-bar">
+                                    <button type="button" class="toggle-decision-btn btn-approve-toggle active" id="btn-toggle-approve" onclick="toggleAdminDecisionMode('APPROVED')">
+                                        <span class="decision-toggle-icon">✓</span>
+                                        <span>Sanction &amp; Approve Loan</span>
+                                    </button>
+                                    <button type="button" class="toggle-decision-btn btn-decline-toggle" id="btn-toggle-decline" onclick="toggleAdminDecisionMode('REJECTED')">
+                                        <span class="decision-toggle-icon">✕</span>
+                                        <span>Decline Application</span>
+                                    </button>
+                                </div>
+
+                                <!-- Form 1: Sanction & Approve Configuration -->
+                                <div id="admin-panel-approve" class="decision-config-panel">
+                                    <div class="config-grid-3">
+                                        <div class="config-field">
+                                            <label class="config-label">Sanctioned Principal Amount (₹) *</label>
+                                            <input type="number" id="admin-input-sanc-amount" class="curved-input font-mono" min="10000" step="10000" oninput="calcAdminSanctionEmi()">
+                                        </div>
+                                        <div class="config-field">
+                                            <label class="config-label">Approved Interest Rate (% p.a.) *</label>
+                                            <input type="number" id="admin-input-approved-rate" class="curved-input font-mono" min="5.0" max="24.0" step="0.05" oninput="calcAdminSanctionEmi()">
+                                        </div>
+                                        <div class="config-field">
+                                            <label class="config-label">Approved Tenure (Months) *</label>
+                                            <input type="number" id="admin-input-approved-tenor" class="curved-input font-mono" min="6" max="240" step="6" oninput="calcAdminSanctionEmi()">
+                                        </div>
+                                    </div>
+                                    <div class="config-emi-live-bar">
+                                        <span>Calculated Monthly Amortization (EMI):</span>
+                                        <strong class="font-mono text-emerald" id="admin-calc-emi-disp">₹15,780 / month</strong>
+                                    </div>
+                                    <div class="config-cta-row">
+                                        <button type="button" class="btn-sanction-confirm" id="btn-submit-sanction" onclick="submitOfficialDetermination('APPROVED')">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block; vertical-align:middle; margin-right:6px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                            <span>Issue Official TLB Sanction Letter</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Form 2: Decline / Adverse Action Configuration -->
+                                <div id="admin-panel-decline" class="decision-config-panel" style="display: none;">
+                                    <div class="config-field">
+                                        <label class="config-label">Regulatory Adverse Action Policy Reason *</label>
+                                        <select id="admin-input-reject-reason" class="curved-select">
+                                            <option value="Automated High Default Risk Classification">Automated High Default Risk Classification (Subprime Risk Band)</option>
+                                            <option value="Debt Servicing FOIR Exceeds Safe 50% Limit">Debt Servicing FOIR Exceeds Statutory 50% Margin</option>
+                                            <option value="Historical Delinquency &amp; DPD Violations">Historical Delinquency / Past 30-89 DPD Cycles</option>
+                                            <option value="Loan Maturity Beyond Statutory Superannuation Age">Loan Maturity Extends Past Sector Retirement Age Without Pension</option>
+                                            <option value="Credit Bureau CIBIL Score Below Risk Benchmark">Credit Bureau CIR Below Acceptable Risk Benchmark</option>
+                                            <option value="Unsatisfactory Debt-to-Income Capacity">Unsatisfactory Debt Servicing Capacity</option>
+                                        </select>
+                                    </div>
+                                    <div class="config-field">
+                                        <label class="config-label">Adverse Action Remarks &amp; Committee Notes</label>
+                                        <textarea id="admin-input-reject-remarks" class="curved-textarea" rows="2" placeholder="e.g. Delinquency frequency and risk score indicators exceed bank lending policy parameters."></textarea>
+                                    </div>
+                                    <div class="config-cta-row">
+                                        <button type="button" class="btn-decline-confirm" id="btn-submit-decline" onclick="submitOfficialDetermination('REJECTED')">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block; vertical-align:middle; margin-right:6px;"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                                            <span>Issue Formal Adverse Action Decline Memo</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dossier-tab-footer">
+                                <button type="button" class="btn-dossier-nav-btn prev" onclick="switchDossierTab('bureau')">
+                                    <span>← Back: Credit Bureau CIR</span>
+                                </button>
+                                <span class="dossier-tab-footer-hint">Phase 3 of 3 • Binding institutional credit determination</span>
+                            </div>
+                        </div><!-- /#dossier-pane-determination -->
+
+                    </div><!-- /#admin-dossier-content -->
+                </div><!-- /.admin-dossier-card -->
+            </div><!-- /.admin-desk-grid -->
+        </div><!-- /#admin-underwriter-portal -->
+
+    <!-- Underwriter / Admin Secure Login Modal -->
+    <div class="modal-backdrop" id="admin-login-modal" style="display: none;">
+        <div class="modal-curved-dialog">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <div class="modal-badge-lock">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="modal-title" data-i18n="admin_modal_title">Underwriter Desk Authentication</h3>
+                        <p class="modal-subtitle" data-i18n="admin_modal_desc">Authorized Bank Officers Only • Internal Sanction Memos, Risk Tiers & Automated Risk Analytics</p>
+                    </div>
+                </div>
+                <button type="button" class="modal-close-btn" onclick="closeAdminLoginModal()" title="Close dialog">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group-curved" style="margin-bottom: 1rem;">
+                    <label class="form-label-curved" data-i18n="admin_username">Officer Username / ID</label>
+                    <input type="text" id="admin-username-input" class="form-input-curved" placeholder="admin" autocomplete="username">
+                </div>
+                <div class="form-group-curved" style="margin-bottom: 1.25rem;">
+                    <label class="form-label-curved" data-i18n="admin_password">Officer Security PIN / Passcode</label>
+                    <input type="password" id="admin-password-input" class="form-input-curved" placeholder="legends2026" autocomplete="current-password" onkeydown="if(event.key==='Enter') submitAdminLogin();">
+                </div>
+                <div class="admin-login-hint">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block; vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg><strong data-i18n="admin_demo_creds">Bank Demo Credentials:</strong> Username: <code>admin</code> | Passcode: <code>legends2026</code>
+                </div>
+                <div id="admin-login-err" class="admin-login-error" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-pill-secondary" onclick="closeAdminLoginModal()" data-i18n="btn_cancel">Cancel</button>
+                <button type="button" class="btn-pill-primary" id="btn-admin-login-submit" onclick="submitAdminLogin()" data-i18n="btn_authenticate_desk">Unlock Underwriter Desk</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Digital E-Sign & Instant Fund Disbursal Modal -->
+    <div class="modal-backdrop" id="disbursal-esign-modal" style="display: none;">
+        <div class="modal-curved-dialog" style="max-width: 540px;">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <div class="modal-badge-lock" style="background: rgba(16, 185, 129, 0.12); color: #10b981; border-color: rgba(16, 185, 129, 0.25);">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="modal-title">Digital E-Sign & Instant Disbursal</h3>
+                        <p class="modal-subtitle">Aadhaar e-KYC Verification & Direct IMPS Bank Account Credit</p>
+                    </div>
+                </div>
+                <button type="button" class="modal-close-btn" onclick="closeDisbursalModal()" title="Close dialog">×</button>
+            </div>
+            <div class="modal-body" id="disbursal-modal-body">
+                <!-- Facility Snapshot Pod -->
+                <div class="esign-summary-box">
+                    <div class="esign-row">
+                        <span class="esign-lbl">Sanctioned Amount:</span>
+                        <strong class="esign-val text-emerald" id="esign-disp-amount">₹5,00,000</strong>
+                    </div>
+                    <div class="esign-row">
+                        <span class="esign-lbl">Annual Rate & Tenor:</span>
+                        <span class="esign-val" id="esign-disp-terms">8.85% p.a. • 36 Months</span>
+                    </div>
+                    <div class="esign-row">
+                        <span class="esign-lbl">Monthly Equated EMI:</span>
+                        <span class="esign-val font-mono" id="esign-disp-emi">₹15,862 / month</span>
+                    </div>
+                    <div class="esign-row">
+                        <span class="esign-lbl">Crediting Bank Account:</span>
+                        <strong class="esign-val font-mono" id="esign-disp-account">100928374651 (TLB)</strong>
+                    </div>
+                </div>
+
+                <div class="form-group-curved" style="margin-top: 1.25rem; margin-bottom: 0.75rem;">
+                    <label class="form-label-curved" style="display:flex; justify-content:space-between;">
+                        <span>Aadhaar E-Sign Verification OTP *</span>
+                        <span style="font-size:11px; color:#10b981; font-weight:700;">LIVE UIDAI SIMULATOR</span>
+                    </label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="esign-otp-input" class="form-input-curved font-mono text-large" placeholder="Enter 6-digit OTP" maxlength="6" value="992026">
+                        <button type="button" class="btn-pill-secondary" style="padding: 0 12px; white-space:nowrap; font-size:12px;" onclick="document.getElementById('esign-otp-input').value='992026';">Fill Demo OTP</button>
+                    </div>
+                    <span class="field-hint" style="margin-top: 4px;">6-digit OTP sent to Aadhaar-linked mobile (Demo OTP: <code>992026</code>)</span>
+                </div>
+
+                <div style="margin-top: 1rem; background: rgba(248,250,252,0.8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; font-size: 11.5px; color: #475569; display: flex; gap: 8px; align-items: flex-start;">
+                    <input type="checkbox" id="esign-consent-check" checked style="margin-top: 2px;">
+                    <label for="esign-consent-check" style="cursor: pointer; line-height: 1.4;">
+                        I agree to execute the digital loan contract with Team Legends Bank, authorize e-NACH automatic recurring EMI debit from my savings account, and consent to electronic execution under the Information Technology Act, 2000.
+                    </label>
+                </div>
+
+                <div id="disbursal-err" class="admin-login-error" style="display: none; margin-top: 10px;"></div>
+            </div>
+
+            <!-- Disbursal In-Progress Screen -->
+            <div class="modal-body" id="disbursal-modal-loading" style="display:none; text-align:center; padding: 2.5rem 1.5rem;">
+                <div class="scanning-spinner-ring" style="margin: 0 auto 1.25rem auto; width: 44px; height: 44px;"></div>
+                <h4 style="color: #1e3a8a; font-size: 16px; font-weight: 800;">Executing 24x7 IMPS Transfer...</h4>
+                <p style="color: #64748b; font-size: 13px; margin-top: 4px;">Validating Aadhaar digital signature, registering e-NACH mandate, and crediting funds to your bank account.</p>
+            </div>
+
+            <!-- Disbursal Success Screen -->
+            <div class="modal-body" id="disbursal-modal-success" style="display:none; text-align:center; padding: 2rem 1.5rem;">
+                <div style="width: 56px; height: 56px; border-radius: 50%; background: #ecfdf5; border: 2px solid #10b981; color: #10b981; display:flex; align-items:center; justify-content:center; margin: 0 auto 1rem auto; font-size: 28px; font-weight: 800;">✓</div>
+                <h3 style="color: #065f46; font-size: 18px; font-weight: 800;">Facility Disbursed Successfully!</h3>
+                <p style="color: #047857; font-size: 13px; margin-top: 4px;">Funds have been credited instantly via IMPS 24x7.</p>
+                <div class="esign-summary-box" style="margin-top: 1.25rem; text-align: left;">
+                    <div class="esign-row">
+                        <span class="esign-lbl">IMPS Reference UTR:</span>
+                        <strong class="esign-val font-mono" id="disbursal-success-utr">—</strong>
+                    </div>
+                    <div class="esign-row">
+                        <span class="esign-lbl">Credited Amount:</span>
+                        <strong class="esign-val text-emerald" id="disbursal-success-amt">—</strong>
+                    </div>
+                    <div class="esign-row">
+                        <span class="esign-lbl">Beneficiary Account:</span>
+                        <strong class="esign-val font-mono" id="disbursal-success-acc">—</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer" id="disbursal-modal-footer">
+                <button type="button" class="btn-pill-secondary" onclick="closeDisbursalModal()">Cancel</button>
+                <button type="button" class="btn-pill-primary" id="btn-confirm-disbursal" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); border-color: #059669;" onclick="submitLoanDisbursal()">Confirm E-Sign & Disburse Loan</button>
+            </div>
+            <div class="modal-footer" id="disbursal-success-footer" style="display:none;">
+                <button type="button" class="btn-pill-primary" onclick="closeDisbursalModal(); goToStep(5);">Close & View Disbursed Dossier</button>
+            </div>
+        </div>
+    </div>
+
+    </div><!-- /#main-app-wrap -->
+
+    <footer class="bank-footer-curved">
+        <div class="footer-content">
+            <span><strong data-i18n="brand_name">TEAM LEGENDS BANK (TLB)</strong> • <span data-i18n="brand_sub">RETAIL & COMMERCIAL LENDING DIVISION • QUANTUM CREDIT APPRAISAL</span></span>
+            <span data-i18n="footer_compliance">Regulated by Reserve Bank of India • Fair Lending Practice & Credit Bureau Compliance</span>
+        </div>
+    </footer>
+
+    <script src="/static/i18n.js"></script>
+    <script src="/static/firebase-auth.js"></script>
+    <script src="/static/app.js"></script>
+</body>
+</html>

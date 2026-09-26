@@ -1,0 +1,10 @@
+{
+    "model_type": "Classical SVC (RBF kernel)",
+    "best_params": {
+        "C": 10.0,
+        "gamma": 0.1
+    },
+    "best_cv_roc_auc": 0.9965974203640269,
+    "train_samples": 1942,
+    "training_time_seconds": 8.5358
+}

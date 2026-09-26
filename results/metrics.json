@@ -1,0 +1,56 @@
+{
+    "classical": {
+        "accuracy": 0.92,
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1_score": 0.6667,
+        "roc_auc": 1.0,
+        "confusion_matrix": [
+            [
+                42,
+                4
+            ],
+            [
+                0,
+                4
+            ]
+        ],
+        "training_time_seconds": 8.5358
+    },
+    "quantum": {
+        "accuracy": 0.72,
+        "precision": 0.2222,
+        "recall": 1.0,
+        "f1_score": 0.3636,
+        "roc_auc": 0.9185,
+        "confusion_matrix": [
+            [
+                32,
+                14
+            ],
+            [
+                0,
+                4
+            ]
+        ],
+        "training_time_seconds": 62.1015
+    },
+    "classical_full_test_benchmark": {
+        "accuracy": 0.9511,
+        "precision": 0.6154,
+        "recall": 0.9412,
+        "f1_score": 0.7442,
+        "roc_auc": 0.9873,
+        "confusion_matrix": [
+            [
+                396,
+                20
+            ],
+            [
+                2,
+                32
+            ]
+        ]
+    },
+    "evaluation_samples": 50
+}

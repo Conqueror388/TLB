@@ -1,0 +1,25 @@
+{
+  "name": "q-credit",
+  "version": "1.0.0",
+  "description": "Apex Commercial Bank • Core Loan Origination & CIBIL Underwriting Engine with Hybrid Quantum-Classical Risk Analytics",
+  "scripts": {
+    "start": "py app/server.py",
+    "dev": "py app/server.py",
+    "preprocess": "py src/preprocess.py",
+    "train:classical": "py src/classical_model.py",
+    "train:quantum": "py src/quantum_model.py",
+    "evaluate": "py src/evaluate.py",
+    "explain": "py src/explain.py"
+  },
+  "keywords": [
+    "banking",
+    "cibil-underwriting",
+    "quantum-computing",
+    "qiskit",
+    "machine-learning",
+    "credit-risk",
+    "fintech"
+  ],
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,32 @@
+# Apex Commercial Bank LOS — Production Requirements
+# Install with: pip install -r requirements-prod.txt
+
+# Web framework
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+
+# Database (Supabase PostgreSQL client)
+supabase==2.7.4
+postgrest==0.16.11
+
+# Firebase Admin SDK (JWT token verification)
+firebase-admin==6.5.0
+
+# HTTP client (for CIBIL API calls)
+httpx==0.27.2
+
+# ML / Quantum
+numpy==1.26.4
+scikit-learn==1.5.1
+qiskit==1.2.4
+qiskit-machine-learning==0.7.2
+joblib==1.4.2
+
+# Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# Utilities
+pydantic==2.8.2
+python-dotenv==1.0.1
+python-multipart==0.0.9

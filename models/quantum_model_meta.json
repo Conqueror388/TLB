@@ -1,0 +1,9 @@
+{
+    "model_type": "Quantum SVC (QSVC with ZZFeatureMap)",
+    "feature_dimension": 4,
+    "reps": 2,
+    "entanglement": "linear",
+    "train_samples": 150,
+    "test_samples": 50,
+    "training_time_seconds": 62.1015
+}

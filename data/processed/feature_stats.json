@@ -1,0 +1,26 @@
+{
+  "RevolvingUtilizationOfUnsecuredLines": {
+    "min": 0.00299022326256471,
+    "max": 1.4872821496112205,
+    "median": 0.23008267069369565,
+    "mean": 0.3372849124765757
+  },
+  "NumberOfTime30-59DaysPastDueNotWorse": {
+    "min": 0.0,
+    "max": 4.0,
+    "median": 0.0,
+    "mean": 0.32666666666666666
+  },
+  "NumberOfTimes90DaysLate": {
+    "min": 0.0,
+    "max": 2.0,
+    "median": 0.0,
+    "mean": 0.17733333333333334
+  },
+  "NumberOfTime60-89DaysPastDueNotWorse": {
+    "min": 0.0,
+    "max": 2.0,
+    "median": 0.0,
+    "mean": 0.18
+  }
+}

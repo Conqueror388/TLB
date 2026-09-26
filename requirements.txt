@@ -1,0 +1,11 @@
+qiskit
+qiskit-machine-learning
+scikit-learn
+imbalanced-learn
+shap
+streamlit
+pandas
+numpy
+matplotlib
+pylatexenc
+plotly
