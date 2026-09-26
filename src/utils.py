@@ -6,8 +6,6 @@ import os
 import json
 import joblib
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 
 # Directory paths
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -17,7 +15,10 @@ MODELS_DIR = os.path.join(PROJECT_ROOT, "models")
 RESULTS_DIR = os.path.join(PROJECT_ROOT, "results")
 
 for directory in [DATA_DIR, PROCESSED_DIR, MODELS_DIR, RESULTS_DIR]:
-    os.makedirs(directory, exist_ok=True)
+    try:
+        os.makedirs(directory, exist_ok=True)
+    except OSError:
+        pass
 
 
 def get_data_filepath(filename: str = "cs-training.csv") -> str:
@@ -129,6 +130,7 @@ def create_sample_dataset_if_missing(csv_path: str, n_samples: int = 1500) -> bo
     nan_mask_dep = np.random.rand(n_samples) < 0.05
     num_dependents[nan_mask_dep] = np.nan
     
+    import pandas as pd
     df = pd.DataFrame({
         "Unnamed: 0": np.arange(1, n_samples + 1),
         "SeriousDlqin2yrs": y,
