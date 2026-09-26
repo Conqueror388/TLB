@@ -4,6 +4,10 @@
     {
       "source": "/api/(.*)",
       "destination": "/api/index.py"
+    },
+    {
+      "source": "/applicant/sanction-memo-download/(.*)",
+      "destination": "/api/index.py"
     }
   ]
 }

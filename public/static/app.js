@@ -7,6 +7,34 @@
 
 let CURRENT_LOANS = [];
 
+/**
+ * Resilient API fetch wrapper:
+ * Automatically falls back between '/api/...' and '/...' routes
+ * to handle diverse serverless/reverse-proxy URL rewriting behaviors seamlessly.
+ */
+async function apiFetch(url, options = {}) {
+    let res = await fetch(url, options);
+    if (res.status === 404 && typeof url === "string") {
+        let altUrl = null;
+        if (url.startsWith("/api/")) {
+            altUrl = url.substring(4);
+        } else if (url.startsWith("/")) {
+            altUrl = "/api" + url;
+        }
+        if (altUrl) {
+            try {
+                const altRes = await fetch(altUrl, options);
+                if (altRes.ok || altRes.status !== 404) {
+                    return altRes;
+                }
+            } catch (e) {
+                console.warn("[apiFetch] fallback failed:", e);
+            }
+        }
+    }
+    return res;
+}
+
 /* --------------------------------------------------------------------------
    Dynamic Multi-Language Strings for Live Calculations & Statuses
    -------------------------------------------------------------------------- */
@@ -400,7 +428,7 @@ async function submitAdminLogin() {
 
     try {
         if (submitBtn) submitBtn.disabled = true;
-        const res = await fetch("/api/admin/login", {
+        const res = await apiFetch("/api/admin/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password })
@@ -477,10 +505,7 @@ async function loadAdminApplicationsQueue(isSilent = false) {
 
     try {
         const token = ADMIN_AUTH_TOKEN || sessionStorage.getItem("apex_admin_token") || "";
-        let res = await fetch(`/api/admin/applications?admin_token=${encodeURIComponent(token)}`);
-        if (res.status === 404) {
-            res = await fetch(`/admin/applications?admin_token=${encodeURIComponent(token)}`);
-        }
+        let res = await apiFetch(`/api/admin/applications?admin_token=${encodeURIComponent(token)}`);
         if (!res.ok) {
             console.error("Failed to load applications queue:", res.status);
             if (!isSilent && typeof showBankSMSToast === "function") {
@@ -536,10 +561,7 @@ async function silentSyncAdminQueue(forceSelectRef = null) {
     IS_SYNCING_QUEUE = true;
     try {
         const token = ADMIN_AUTH_TOKEN || sessionStorage.getItem("apex_admin_token") || "";
-        let res = await fetch(`/api/admin/applications?admin_token=${encodeURIComponent(token)}`);
-        if (res.status === 404) {
-            res = await fetch(`/admin/applications?admin_token=${encodeURIComponent(token)}`);
-        }
+        let res = await apiFetch(`/api/admin/applications?admin_token=${encodeURIComponent(token)}`);
         if (!res.ok) return;
         const data = await res.json();
         const incomingApps = data.applications || [];
@@ -779,7 +801,7 @@ async function runBackgroundRiskAppraisal(ref) {
     if (!ref) return;
     try {
         const token = ADMIN_AUTH_TOKEN || sessionStorage.getItem("apex_admin_token") || "";
-        const res = await fetch("/api/admin/evaluate-qsvm", {
+        const res = await apiFetch("/api/admin/evaluate-qsvm", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ application_ref: ref, admin_token: token })
@@ -1039,7 +1061,7 @@ async function runQSVMForActiveApp() {
 
     try {
         const token = ADMIN_AUTH_TOKEN || sessionStorage.getItem("apex_admin_token") || "";
-        const res = await fetch("/api/admin/evaluate-qsvm", {
+        const res = await apiFetch("/api/admin/evaluate-qsvm", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ application_ref: ACTIVE_ADMIN_APP_REF, admin_token: token })
@@ -1124,7 +1146,7 @@ async function submitOfficialDetermination(decision) {
         const p = parseFloat(document.getElementById("admin-input-sanc-amount")?.value);
         const r = parseFloat(document.getElementById("admin-input-approved-rate")?.value);
         const n = parseInt(document.getElementById("admin-input-approved-tenor")?.value, 10);
-        const remarks = document.getElementById("admin-input-officer-remarks")?.value.trim();
+        const remarks = document.getElementById("admin-input-officer-remarks")?.value?.trim() || "";
 
         if (isNaN(p) || p <= 0) {
             alert("Please enter a valid Sanctioned Loan Principal.");
@@ -1145,7 +1167,7 @@ async function submitOfficialDetermination(decision) {
         payload.officer_remarks = remarks || "Sanctioned following automated credit risk evaluation.";
     } else {
         const reason = document.getElementById("admin-input-reject-reason")?.value;
-        const remarks = document.getElementById("admin-input-reject-remarks")?.value.trim();
+        const remarks = document.getElementById("admin-input-reject-remarks")?.value?.trim() || "";
         payload.rejection_reason = reason;
         payload.officer_remarks = remarks || "Declined based on institutional credit risk policy.";
     }
@@ -1154,7 +1176,7 @@ async function submitOfficialDetermination(decision) {
         const submitBtn = decision === "APPROVED" ? document.getElementById("btn-submit-sanction") : document.getElementById("btn-submit-decline");
         if (submitBtn) submitBtn.disabled = true;
 
-        const res = await fetch("/api/admin/decide-application", {
+        const res = await apiFetch("/api/admin/decide-application", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
@@ -1200,7 +1222,7 @@ function startApplicantDecisionPolling(applicationRef) {
 
     APPLICANT_POLL_INTERVAL = setInterval(async () => {
         try {
-            const res = await fetch(`/api/applicant/status/${encodeURIComponent(applicationRef)}`);
+            const res = await apiFetch(`/api/applicant/status/${encodeURIComponent(applicationRef)}`);
             if (!res.ok) return;
             const data = await res.json();
 
@@ -1349,7 +1371,7 @@ async function handleSendSanctionRequest() {
 
     try {
         if (ref) {
-            await fetch("/api/applicant/send-sanction-request", {
+            await apiFetch("/api/applicant/send-sanction-request", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ application_ref: ref })
@@ -1522,7 +1544,7 @@ async function submitLoanDisbursal() {
     document.getElementById("disbursal-modal-loading").style.display = "block";
 
     try {
-        const res = await fetch("/api/applicant/disburse-loan", {
+        const res = await apiFetch("/api/applicant/disburse-loan", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -1820,10 +1842,10 @@ function goToStep(stepNum) {
 
 function validateStep(stepNum) {
     if (stepNum === 1) {
-        const name = document.getElementById("app-name")?.value.trim();
-        const age = parseInt(document.getElementById("app-age")?.value, 10);
-        const acc = document.getElementById("app-account")?.value.trim();
-        const pan = document.getElementById("app-pan")?.value.trim().toUpperCase();
+        const name = document.getElementById("app-name")?.value?.trim() || "";
+        const age = parseInt(document.getElementById("app-age")?.value || "0", 10);
+        const acc = document.getElementById("app-account")?.value?.trim() || "";
+        const pan = document.getElementById("app-pan")?.value?.trim()?.toUpperCase() || "";
 
         if (!name) {
             alert("Please enter applicant's Full Legal Name.");
@@ -2189,16 +2211,16 @@ function syncLoansFromDOM() {
 async function submitApplication() {
     syncLoansFromDOM();
 
-    const fullName = document.getElementById("app-name").value.trim();
-    const accountNo = document.getElementById("app-account").value.trim();
-    const panNumber = document.getElementById("app-pan").value.trim().toUpperCase();
-    const applicantAge = parseInt(document.getElementById("app-age").value, 10);
-    const workingSector = document.getElementById("app-sector").value;
-    const employment = document.getElementById("app-employment").value;
-    const income = parseFloat(document.getElementById("app-income").value);
-    const amount = parseFloat(document.getElementById("app-amount").value);
-    const tenor = parseInt(document.getElementById("app-tenor").value, 10);
-    const purpose = document.getElementById("app-purpose").value;
+    const fullName = document.getElementById("app-name")?.value?.trim() || "";
+    const accountNo = document.getElementById("app-account")?.value?.trim() || "";
+    const panNumber = document.getElementById("app-pan")?.value?.trim()?.toUpperCase() || "";
+    const applicantAge = parseInt(document.getElementById("app-age")?.value || "35", 10);
+    const workingSector = document.getElementById("app-sector")?.value || "PRIVATE_CORPORATE";
+    const employment = document.getElementById("app-employment")?.value || "Salaried";
+    const income = parseFloat(document.getElementById("app-income")?.value || "0");
+    const amount = parseFloat(document.getElementById("app-amount")?.value || "0");
+    const tenor = parseInt(document.getElementById("app-tenor")?.value || "36", 10);
+    const purpose = document.getElementById("app-purpose")?.value || "Personal / General Purpose";
 
     if (!fullName) {
         alert("Please enter applicant's Full Legal Name.");
@@ -2273,7 +2295,7 @@ async function submitApplication() {
     } catch (_) {}
 
     try {
-        const response = await fetch("/api/submit-application", {
+        const response = await apiFetch("/api/submit-application", {
             method: "POST",
             headers: headers,
             body: JSON.stringify(payload)

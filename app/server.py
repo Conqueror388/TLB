@@ -718,6 +718,7 @@ def api_disburse_loan(req: DisbursalRequest, request: Request):
         "esign_status": "Aadhaar eSign Verified & Sealed (NeSL Digital Contract)"
     }
     app_data["disbursal_details"] = disbursal_record
+    app_data["disbursal"] = disbursal_record
 
     # Update receipt
     if "receipt" in app_data:
@@ -995,7 +996,7 @@ def get_admin_applications(admin_token: Optional[str] = None):
             "qsvm_analysis": item.get("qsvm_analysis", {}),
             "decision_details": item.get("decision_details", {}),
             "uploaded_statement": item.get("uploaded_statement"),
-            "disbursal": item.get("disbursal", {}),
+            "disbursal": item.get("disbursal") or item.get("disbursal_details") or {},
             "answer": item.get("answer", {})
         })
     return {
@@ -1027,6 +1028,7 @@ def api_evaluate_qsvm(req: EvaluateQSVMRequest):
     app_data = APPLICATIONS_STORE[req.application_ref]
     analysis = evaluate_qsvm_for_application(app_data)
     app_data["qsvm_analysis"] = analysis
+    db_save_application(app_data)
 
     return {
         "status": "success",
@@ -1595,6 +1597,7 @@ def submit_loan_application(req: LoanApplicationSubmission, request: Request):
 
 # Backwards compatibility endpoints
 @app.post("/api/verify-cibil")
+@app.post("/verify-cibil")
 def verify_cibil_legacy(req: Dict[str, Any], request: Request):
     sub_req = LoanApplicationSubmission(
         full_name=req.get("full_name", "Applicant"),
