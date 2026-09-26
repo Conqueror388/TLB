@@ -656,6 +656,7 @@ class DisbursalRequest(BaseModel):
 
 
 @app.post("/api/applicant/send-sanction-request")
+@app.post("/applicant/send-sanction-request")
 def send_sanction_request_to_admin(req: SanctionDispatchQuery):
     """Marks application as explicitly dispatched to Admin Underwriting Queue."""
     if req.application_ref not in APPLICATIONS_STORE:
@@ -675,6 +676,7 @@ def send_sanction_request_to_admin(req: SanctionDispatchQuery):
 
 
 @app.post("/api/applicant/disburse-loan")
+@app.post("/applicant/disburse-loan")
 def api_disburse_loan(req: DisbursalRequest, request: Request):
     """
     Digital E-Sign & Instant Disbursal:
@@ -742,6 +744,7 @@ def api_disburse_loan(req: DisbursalRequest, request: Request):
 
 
 @app.get("/api/applicant/sanction-memo-download/{application_ref}", response_class=HTMLResponse)
+@app.get("/applicant/sanction-memo-download/{application_ref}", response_class=HTMLResponse)
 def download_sanction_letter(application_ref: str):
     """
     Generates a formal, printable & PDF-exportable Institutional Loan Sanction Letter.
@@ -925,6 +928,7 @@ def download_sanction_letter(application_ref: str):
 
 
 @app.post("/api/admin/login")
+@app.post("/admin/login")
 def admin_login(creds: AdminLoginRequest, request: Request):
     """Authenticate bank underwriter / administrator with anti-brute-force rate limiting and timing-attack protection."""
     client_ip = request.client.host if request.client else "127.0.0.1"
@@ -948,6 +952,7 @@ class AdminClearQueueRequest(BaseModel):
 
 
 @app.post("/api/admin/clear-queue")
+@app.post("/admin/clear-queue")
 def clear_admin_queue(req: AdminClearQueueRequest):
     """Purges all application records from the queue and database."""
     token = req.admin_token or ""
@@ -966,6 +971,7 @@ def clear_admin_queue(req: AdminClearQueueRequest):
 
 
 @app.get("/api/admin/applications")
+@app.get("/admin/applications")
 def get_admin_applications(admin_token: Optional[str] = None):
     """
     Returns complete applications queue for the Underwriter Desk.
@@ -1005,6 +1011,7 @@ class EvaluateQSVMRequest(BaseModel):
 
 
 @app.post("/api/admin/evaluate-qsvm")
+@app.post("/admin/evaluate-qsvm")
 def api_evaluate_qsvm(req: EvaluateQSVMRequest):
     """
     Executes real Quantum Kernel QSVM model for a specific application.
@@ -1040,6 +1047,7 @@ class AdminDecisionRequest(BaseModel):
 
 
 @app.post("/api/admin/decide-application")
+@app.post("/admin/decide-application")
 def decide_application(req: AdminDecisionRequest):
     """
     Human-in-the-Loop Credit Underwriter Determination:
@@ -1165,6 +1173,7 @@ def decide_application(req: AdminDecisionRequest):
 
 
 @app.get("/api/applicant/status/{application_ref}")
+@app.get("/applicant/status/{application_ref}")
 def get_applicant_status(application_ref: str, request: Request):
     """
     Allows applicant to check live determination status of their loan submission.
@@ -1207,6 +1216,7 @@ class AdminUnderwriteQuery(BaseModel):
 
 
 @app.post("/api/admin/underwrite-dossier")
+@app.post("/admin/underwrite-dossier")
 def get_admin_underwrite_dossier(query: AdminUnderwriteQuery):
     """Fetch complete internal underwriting dossier for admin inspection."""
     token = query.admin_token or ""
@@ -1232,6 +1242,7 @@ def get_admin_underwrite_dossier(query: AdminUnderwriteQuery):
 
 
 @app.get("/api/health")
+@app.get("/health")
 def health_check():
     return {
         "status": "ok",
@@ -1242,6 +1253,7 @@ def health_check():
 
 
 @app.post("/api/submit-application")
+@app.post("/submit-application")
 def submit_loan_application(req: LoanApplicationSubmission, request: Request):
     """
     Primary Banking Underwriting Endpoint:

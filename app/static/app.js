@@ -477,7 +477,10 @@ async function loadAdminApplicationsQueue(isSilent = false) {
 
     try {
         const token = ADMIN_AUTH_TOKEN || sessionStorage.getItem("apex_admin_token") || "";
-        const res = await fetch(`/api/admin/applications?admin_token=${encodeURIComponent(token)}`);
+        let res = await fetch(`/api/admin/applications?admin_token=${encodeURIComponent(token)}`);
+        if (res.status === 404) {
+            res = await fetch(`/admin/applications?admin_token=${encodeURIComponent(token)}`);
+        }
         if (!res.ok) {
             console.error("Failed to load applications queue:", res.status);
             if (!isSilent && typeof showBankSMSToast === "function") {
@@ -533,7 +536,10 @@ async function silentSyncAdminQueue(forceSelectRef = null) {
     IS_SYNCING_QUEUE = true;
     try {
         const token = ADMIN_AUTH_TOKEN || sessionStorage.getItem("apex_admin_token") || "";
-        const res = await fetch(`/api/admin/applications?admin_token=${encodeURIComponent(token)}`);
+        let res = await fetch(`/api/admin/applications?admin_token=${encodeURIComponent(token)}`);
+        if (res.status === 404) {
+            res = await fetch(`/admin/applications?admin_token=${encodeURIComponent(token)}`);
+        }
         if (!res.ok) return;
         const data = await res.json();
         const incomingApps = data.applications || [];
