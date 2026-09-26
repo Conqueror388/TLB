@@ -1875,13 +1875,15 @@ function goToStep(stepNum) {
             form.scrollIntoView({ behavior: "smooth", block: "start" });
         }
 
-        // Show only active wizard page inside form
+        // Show only active wizard page inside form with dynamic directional sliding block animation
         const pages = document.querySelectorAll(".wizard-page");
-        pages.forEach((page) => page.classList.remove("active-page"));
+        pages.forEach((page) => page.classList.remove("active-page", "slide-in-right", "slide-in-left"));
         const activePage = document.getElementById(`page-step-${stepNum}`);
         if (activePage) {
-            activePage.classList.add("active-page");
+            const slideClass = (typeof prevWizardStepNum !== 'undefined' && stepNum < prevWizardStepNum) ? "slide-in-left" : "slide-in-right";
+            activePage.classList.add("active-page", slideClass);
         }
+        window.prevWizardStepNum = stepNum;
     }
 
     // Update Stepper nodes and connectors
@@ -2079,9 +2081,19 @@ function initUnderstandableWorkings() {
         if (dispRateTag) dispRateTag.textContent = product.tag;
         if (dispRateSub) dispRateSub.textContent = product.sub;
         if (dispAmount) dispAmount.textContent = formatINR(principal);
-        if (dispEmi) dispEmi.textContent = `${formatINR(emi)} ${d.mo_unit}`;
+        if (dispEmi) {
+            dispEmi.textContent = `${formatINR(emi)} ${d.mo_unit}`;
+            dispEmi.classList.remove("stat-pulse-slide");
+            void dispEmi.offsetWidth;
+            dispEmi.classList.add("stat-pulse-slide");
+        }
         if (dispInterest) dispInterest.textContent = formatINR(totalInterest);
-        if (dispTotal) dispTotal.textContent = formatINR(totalRepayment);
+        if (dispTotal) {
+            dispTotal.textContent = formatINR(totalRepayment);
+            dispTotal.classList.remove("stat-pulse-slide");
+            void dispTotal.offsetWidth;
+            dispTotal.classList.add("stat-pulse-slide");
+        }
 
         if (dispAfford) {
             if (parseFloat(emiPct) <= 30) {

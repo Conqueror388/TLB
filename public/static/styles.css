@@ -938,26 +938,131 @@ h1, h2, h3, h4, .brand-text, .card-title-curved, .sub-card-title, .decision-labe
 /* --------------------------------------------------------------------------
    Wizard Multi-Page Containers
    -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------
+   Interactive Step Pages & Dynamic Sliding Block Animations
+   -------------------------------------------------------------------------- */
 .wizard-page {
     display: none;
     flex-direction: column;
     gap: 1.5rem;
-    animation: fadeInPage 0.35s var(--ease-smooth);
 }
 
 .wizard-page.active-page {
     display: flex;
+    animation: slideBlockUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.wizard-page.slide-in-right {
+    animation: slideBlockInRight 0.42s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+}
+
+.wizard-page.slide-in-left {
+    animation: slideBlockInLeft 0.42s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+}
+
+/* Core Sliding Block Keyframes */
+@keyframes slideBlockUp {
+    0% {
+        opacity: 0;
+        transform: translateY(24px) scale(0.985);
+        filter: blur(2px);
+    }
+    60% {
+        filter: blur(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes slideBlockInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(36px) scale(0.985);
+        filter: blur(3px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes slideBlockInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-36px) scale(0.985);
+        filter: blur(3px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+        filter: blur(0);
+    }
 }
 
 @keyframes fadeInPage {
     from {
         opacity: 0;
-        transform: translateY(8px);
+        transform: translateY(16px);
     }
     to {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Staggered Form Field Sliding Blocks */
+.wizard-page.active-page .form-field:nth-child(1) { animation: slideBlockUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.04s both; }
+.wizard-page.active-page .form-field:nth-child(2) { animation: slideBlockUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both; }
+.wizard-page.active-page .form-field:nth-child(3) { animation: slideBlockUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both; }
+.wizard-page.active-page .form-field:nth-child(4) { animation: slideBlockUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both; }
+.wizard-page.active-page .form-field:nth-child(5) { animation: slideBlockUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.20s both; }
+.wizard-page.active-page .form-field:nth-child(6) { animation: slideBlockUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.24s both; }
+
+/* Modern Typography In-Animation (Text Slide & Reveal) */
+@keyframes textSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(14px);
+        filter: blur(3px);
+    }
+    60% {
+        filter: blur(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes textSlideInFast {
+    0% {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes statValueSlide {
+    0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.96);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.stat-pulse-slide {
+    animation: statValueSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .wizard-page-header {
@@ -5668,6 +5773,130 @@ body.light-mode .stat-pill { background: var(--surface-2); }
     70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
     100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
 }
+
+/* ==========================================================================
+   GLOBAL SLIDING BLOCK & TEXT IN-ANIMATION SUITE
+   High-Fidelity Commercial Fintech Deceleration & Kinetic Reveal
+   ========================================================================== */
+
+/* 1. Global Card & Block Sliding Animations */
+.curved-card,
+.understandable-working-card,
+.dossier-card,
+.status-card,
+.user-receipt-panel,
+.admin-table-container,
+.credit-history-toggle-grid {
+    animation: slideBlockUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.modal-card-curved,
+.auth-card-curved {
+    animation: slideBlockUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.admin-dossier-panel {
+    animation: slideBlockInRight 0.48s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* 2. Staggered Working Stat Blocks */
+.working-stats-grid .working-stat-item:nth-child(1) {
+    animation: slideBlockUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+}
+.working-stats-grid .working-stat-item:nth-child(2) {
+    animation: slideBlockUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.10s both;
+}
+.working-stats-grid .working-stat-item:nth-child(3) {
+    animation: slideBlockUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+.working-stats-grid .working-stat-item:nth-child(4) {
+    animation: slideBlockUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.20s both;
+}
+
+/* 3. Staggered Purpose Pills & Option Cards */
+.purpose-chips-flow .purpose-pill-btn:nth-child(1) { animation: slideBlockUp 0.36s cubic-bezier(0.16, 1, 0.3, 1) 0.04s both; }
+.purpose-chips-flow .purpose-pill-btn:nth-child(2) { animation: slideBlockUp 0.36s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both; }
+.purpose-chips-flow .purpose-pill-btn:nth-child(3) { animation: slideBlockUp 0.36s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both; }
+.purpose-chips-flow .purpose-pill-btn:nth-child(4) { animation: slideBlockUp 0.36s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both; }
+.purpose-chips-flow .purpose-pill-btn:nth-child(5) { animation: slideBlockUp 0.36s cubic-bezier(0.16, 1, 0.3, 1) 0.20s both; }
+.purpose-chips-flow .purpose-pill-btn:nth-child(6) { animation: slideBlockUp 0.36s cubic-bezier(0.16, 1, 0.3, 1) 0.24s both; }
+
+.credit-history-toggle-grid .option-pill-card:nth-child(1) {
+    animation: slideBlockUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.06s both;
+}
+.credit-history-toggle-grid .option-pill-card:nth-child(2) {
+    animation: slideBlockUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+}
+
+/* 4. Text In-Animations (Typography Reveal) */
+.brand-title,
+.hero-title,
+.card-title-curved,
+.wizard-page-title,
+.working-title,
+.dossier-title,
+.dossier-header-title,
+.receipt-header-title {
+    animation: textSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.brand-motto,
+.hero-subtitle,
+.card-desc-curved,
+.field-hint,
+.working-stat-sub,
+.receipt-subtitle {
+    animation: textSlideInFast 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+}
+
+.wizard-page-badge,
+.working-pill-tag,
+.dossier-badge,
+.status-pill,
+.queue-item-badge {
+    animation: textSlideInFast 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+}
+
+/* 5. Live Number & Metric Sliding Pop */
+.working-stat-val,
+.dossier-metric-val,
+.receipt-stat-val {
+    animation: statValueSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* 6. Tactile Micro-Interactions on Interactive Elements */
+.purpose-pill-btn,
+.option-pill-card,
+.preset-chip-btn,
+.btn-pill-primary,
+.btn-pill-secondary,
+.btn-curved-primary {
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.22s ease, 
+                border-color 0.2s ease, 
+                background 0.2s ease;
+}
+
+.purpose-pill-btn:hover,
+.option-pill-card:hover,
+.preset-chip-btn:hover {
+    transform: translateY(-2.5px);
+}
+
+.btn-pill-primary:hover,
+.btn-curved-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -4px rgba(16, 185, 129, 0.35);
+}
+
+.purpose-pill-btn:active,
+.option-pill-card:active,
+.preset-chip-btn:active,
+.btn-pill-primary:active,
+.btn-curved-primary:active {
+    transform: translateY(1px) scale(0.985);
+}
+
 
 
 
