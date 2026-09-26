@@ -531,7 +531,17 @@ def evaluate_qsvm_for_application(app_data: Dict[str, Any]) -> Dict[str, Any]:
 # -----------------------------------------------------------------------------
 # SQLite Persistent Database Layer
 # -----------------------------------------------------------------------------
-DB_PATH = os.path.join(PROJECT_ROOT, "data", "qcredit.db")
+if os.environ.get("VERCEL") or not os.access(PROJECT_ROOT, os.W_OK):
+    DB_PATH = os.path.join("/tmp", "qcredit.db")
+    orig_db = os.path.join(PROJECT_ROOT, "data", "qcredit.db")
+    if os.path.exists(orig_db) and not os.path.exists(DB_PATH):
+        try:
+            import shutil
+            shutil.copy2(orig_db, DB_PATH)
+        except Exception:
+            pass
+else:
+    DB_PATH = os.path.join(PROJECT_ROOT, "data", "qcredit.db")
 
 def init_db():
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
