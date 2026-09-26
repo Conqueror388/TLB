@@ -1181,60 +1181,7 @@ async function submitOfficialDetermination(decision) {
     }
 }
 
-async function seedSampleBorrowerApplication() {
-    const seed = Math.floor(10000 + Math.random() * 90000);
-    const sampleNames = ["Pooja Hegde", "Siddharth Malhotra", "Kavita Krishnan", "Arjun Rampal", "Deepa Mehra"];
-    const name = sampleNames[Math.floor(Math.random() * sampleNames.length)];
-    const requested = Math.floor(300000 + Math.random() * 700000);
 
-    const payload = {
-        full_name: `${name}`,
-        account_no: `100928${seed}`,
-        pan_number: `TLBPH${seed % 9000 + 1000}Z`,
-        applicant_age: 32 + (seed % 15),
-        working_sector: "PRIVATE_CORPORATE",
-        employment_type: "Salaried",
-        monthly_income: 75000.0,
-        loan_amount_requested: requested,
-        loan_tenor_months: 36,
-        loan_purpose: "Automobile & Travel Facility",
-        role: "user",
-        loans: [
-            {
-                id: `LN-${seed}`,
-                lender: "Axis Bank",
-                type: "Personal Loan",
-                sanctioned_amount: 150000.0,
-                outstanding_balance: 30000.0,
-                monthly_emi: 5200.0,
-                tenor_months: 24,
-                emis_paid: 18,
-                status: "REGULAR",
-                dpd_status: "0 DPD (Punctual)",
-                dpd_history: "0-0-0-0-0-0"
-            }
-        ]
-    };
-
-    try {
-        const res = await fetch("/api/submit-application", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        });
-        if (res.ok) {
-            const data = await res.json();
-            const newRef = data.receipt?.application_ref;
-            if (typeof showBankSMSToast === "function") {
-                showBankSMSToast(`[APPLICATION INFLOW] New Application: ${payload.full_name} (${newRef}) received into queue.`, "info", 6000);
-            }
-            await loadAdminApplicationsQueue();
-            if (newRef) selectAdminApplication(newRef);
-        }
-    } catch (e) {
-        console.error("Failed to seed application:", e);
-    }
-}
 
 /* --------------------------------------------------------------------------
    Live Applicant Status Polling & Instant Determination Synchronization

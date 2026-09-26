@@ -943,9 +943,26 @@ def admin_login(creds: AdminLoginRequest, request: Request):
     raise HTTPException(status_code=401, detail="Invalid underwriter credentials. Access denied.")
 
 
-class AdminUnderwriteQuery(BaseModel):
-    application_ref: Optional[str] = None
+class AdminClearQueueRequest(BaseModel):
     admin_token: str
+
+
+@app.post("/api/admin/clear-queue")
+def clear_admin_queue(req: AdminClearQueueRequest):
+    """Purges all application records from the queue and database."""
+    token = req.admin_token or ""
+    if not (secrets.compare_digest(token, ADMIN_SECRET_TOKEN) or secrets.compare_digest(token, LEGACY_SECRET_TOKEN)):
+        raise HTTPException(status_code=403, detail="Unauthorized: Valid underwriter admin token required.")
+    
+    APPLICATIONS_STORE.clear()
+    try:
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.execute("DELETE FROM applications")
+            conn.commit()
+    except Exception as e:
+        print(f"[WARN] Error clearing sqlite applications: {e}")
+    
+    return {"status": "success", "message": "Queue cleared successfully", "count": 0}
 
 
 @app.get("/api/admin/applications")
@@ -1182,6 +1199,11 @@ def get_applicant_status(application_ref: str, request: Request):
         "customer": safe_customer,
         "decision_details": record.get("decision_details", {})
     }
+
+
+class AdminUnderwriteQuery(BaseModel):
+    application_ref: Optional[str] = None
+    admin_token: str
 
 
 @app.post("/api/admin/underwrite-dossier")
