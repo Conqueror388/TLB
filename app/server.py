@@ -19,10 +19,13 @@ import threading
 import webbrowser
 import sqlite3
 import hashlib
+import html
+import secrets
+from collections import defaultdict
 from typing import List, Optional, Dict, Any
 from contextlib import asynccontextmanager
 import numpy as np
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request, Header
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse, HTMLResponse
 from pydantic import BaseModel, Field
@@ -75,6 +78,51 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="TEAM LEGENDS BANK (TLB) - Loan Origination System", version="5.0.0", lifespan=lifespan)
+
+# -----------------------------------------------------------------------------
+# HTTP Security Headers Middleware (OWASP & RBI Compliance)
+# -----------------------------------------------------------------------------
+@app.middleware("http")
+async def security_headers_middleware(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    return response
+
+# -----------------------------------------------------------------------------
+# In-Memory Rate Limiter (Anti-Brute-Force & Denial-of-Service Defense)
+# -----------------------------------------------------------------------------
+RATE_LIMIT_STORE = defaultdict(list)
+
+def enforce_rate_limit(client_ip: str, key_prefix: str, max_requests: int, window_seconds: int):
+    now = time.time()
+    rate_key = f"{key_prefix}:{client_ip}"
+    RATE_LIMIT_STORE[rate_key] = [t for t in RATE_LIMIT_STORE[rate_key] if now - t < window_seconds]
+    if len(RATE_LIMIT_STORE[rate_key]) >= max_requests:
+        retry_after = int(window_seconds - (now - RATE_LIMIT_STORE[rate_key][0]))
+        raise HTTPException(
+            status_code=429,
+            detail=f"Rate limit exceeded for action. Please retry in {max(1, retry_after)} seconds."
+        )
+    RATE_LIMIT_STORE[rate_key].append(now)
+
+# -----------------------------------------------------------------------------
+# PII Masking Utilities (Privacy & Data Protection DPDP Compliance)
+# -----------------------------------------------------------------------------
+def mask_account(acc: str) -> str:
+    acc_clean = re.sub(r"[^0-9]", "", str(acc))
+    if len(acc_clean) <= 4:
+        return acc_clean
+    return f"XXXX-XXXX-{acc_clean[-4:]}"
+
+def mask_pan(pan: str) -> str:
+    pan_str = str(pan).strip().upper()
+    if len(pan_str) <= 4:
+        return pan_str
+    return f"XXXXX{pan_str[5:]}"
 
 
 # -----------------------------------------------------------------------------
@@ -559,8 +607,11 @@ def db_load_all_applications() -> Dict[str, Any]:
 
 # Initialize database and in-memory store from SQLite
 init_db()
-ADMIN_CREDENTIALS = {"username": "admin", "password": "apex2026"}
-ADMIN_SECRET_TOKEN = "TLB-SECURE-TOKEN-UNDERWRITER-2026"
+ADMIN_CREDENTIALS = {
+    "username": os.environ.get("TLB_ADMIN_USER", "admin"),
+    "password": os.environ.get("TLB_ADMIN_PASSWORD", "apex2026")
+}
+ADMIN_SECRET_TOKEN = os.environ.get("TLB_ADMIN_TOKEN", "TLB-SECURE-TOKEN-UNDERWRITER-2026")
 LEGACY_SECRET_TOKEN = "ACB-SECURE-TOKEN-UNDERWRITER-2026"
 APPLICATIONS_STORE: Dict[str, Any] = db_load_all_applications()
 
@@ -595,16 +646,24 @@ def send_sanction_request_to_admin(req: SanctionDispatchQuery):
 
 
 @app.post("/api/applicant/disburse-loan")
-def api_disburse_loan(req: DisbursalRequest):
+def api_disburse_loan(req: DisbursalRequest, request: Request):
     """
     Digital E-Sign & Instant Disbursal:
+    - Enforces rate limiting on disbursals.
     - Validates Aadhaar eSign verification.
     - Transitions facility status to 'DISBURSED'.
     - Generates unique IMPS UTR reference.
     - Saves updated state to SQLite database.
     """
+    client_ip = request.client.host if request.client else "127.0.0.1"
+    enforce_rate_limit(client_ip, "disburse", max_requests=10, window_seconds=300)
+
     if req.application_ref not in APPLICATIONS_STORE:
         raise HTTPException(status_code=404, detail="Application reference not found.")
+
+    otp_clean = str(req.aadhaar_otp or "").strip()
+    if not otp_clean or len(otp_clean) < 4:
+        raise HTTPException(status_code=400, detail="Invalid Aadhaar OTP. Please enter valid verification code.")
 
     app_data = APPLICATIONS_STORE[req.application_ref]
     if app_data.get("status") not in ["SANCTIONED", "APPROVED", "DISBURSED"]:
@@ -675,13 +734,25 @@ def download_sanction_letter(application_ref: str):
     sector = applicant.get("working_sector", "Private Corporate")
     age = applicant.get("applicant_age", 34)
 
+    # Sanitize all user-controlled values against HTML injection / XSS and mask PII
+    esc_name = html.escape(str(name))
+    esc_acc_masked = html.escape(mask_account(str(acc)))
+    esc_pan_masked = html.escape(mask_pan(str(pan)))
+    esc_sector = html.escape(str(sector))
+    esc_ref = html.escape(str(application_ref))
+
     sanc_amt = decision.get("sanctioned_amount") or loan_req.get("amount_requested", 500000.0)
     rate = decision.get("approved_rate") or 8.85
     tenor = decision.get("approved_tenor_months") or loan_req.get("tenor_months", 36)
     emi = decision.get("approved_emi") or calculate_monthly_emi(sanc_amt, rate, tenor)
 
+    esc_sanc_amt = html.escape(f"₹{int(sanc_amt):,}")
+    esc_rate = html.escape(f"{rate:.2f}% p.a.")
+    esc_emi = html.escape(f"₹{int(emi):,}")
+    esc_tenor = html.escape(f"{tenor} Months")
+
     doc_hash = hashlib.sha256(f"{application_ref}-{name}-{sanc_amt}-{acc}".encode()).hexdigest()[:24].upper()
-    qr_data = f"https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=TLB-SANCTION:{application_ref}:SHA:{doc_hash}"
+    qr_data = f"https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=TLB-SANCTION:{esc_ref}:SHA:{doc_hash}"
 
     monthly_r = (rate / 12.0) / 100.0
     balance = float(sanc_amt)
@@ -702,11 +773,13 @@ def download_sanction_letter(application_ref: str):
 
     disbursed_badge = ""
     if disbursal and disbursal.get("utr_ref"):
+        esc_utr = html.escape(str(disbursal.get("utr_ref", "")))
+        esc_ben_acc = html.escape(mask_account(str(disbursal.get("beneficiary_account", ""))))
         disbursed_badge = f"""
         <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:8px; padding:10px 14px; margin-top:16px; display:flex; justify-content:space-between; align-items:center;">
             <div>
                 <strong style="color:#065f46; font-size:13px;">FUNDS DISBURSED & CREDITED (IMPS 24x7)</strong>
-                <div style="color:#047857; font-size:12px; margin-top:2px;">UTR Ref: <strong>{disbursal.get('utr_ref')}</strong> • Credited to A/C: <strong>{disbursal.get('beneficiary_account')}</strong></div>
+                <div style="color:#047857; font-size:12px; margin-top:2px;">UTR Ref: <strong>{esc_utr}</strong> • Credited to A/C: <strong>{esc_ben_acc}</strong></div>
             </div>
             <span style="background:#10b981; color:#fff; font-size:11px; font-weight:bold; padding:4px 10px; border-radius:6px;">DISBURSED</span>
         </div>
@@ -716,7 +789,7 @@ def download_sanction_letter(application_ref: str):
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TLB Official Sanction Letter - {application_ref}</title>
+    <title>TLB Official Sanction Letter - {esc_ref}</title>
     <style>
         body {{ font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; background: #f8fafc; color: #0f172a; margin: 0; padding: 20px; }}
         .sheet {{ max-width: 820px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); }}
@@ -753,7 +826,7 @@ def download_sanction_letter(application_ref: str):
             <div>
                 <div class="brand-title">TEAM LEGENDS BANK (TLB)</div>
                 <div class="brand-sub">RETAIL & COMMERCIAL LENDING DIVISION • DIGITAL CREDIT APPRAISAL</div>
-                <div style="font-size:12px; color:#475569; margin-top:6px;">Ref: <strong style="font-family:monospace; color:#1e3a8a;">{application_ref}</strong> • Date: September 26, 2026</div>
+                <div style="font-size:12px; color:#475569; margin-top:6px;">Ref: <strong style="font-family:monospace; color:#1e3a8a;">{esc_ref}</strong> • Date: September 26, 2026</div>
             </div>
             <div style="text-align:right;">
                 <div class="badge-sanc">OFFICIALLY SANCTIONED</div>
@@ -762,22 +835,22 @@ def download_sanction_letter(application_ref: str):
         </div>
 
         <p style="font-size:14px; line-height:1.6; margin-bottom:16px;">
-            Dear <strong>{name}</strong>,<br>
+            Dear <strong>{esc_name}</strong>,<br>
             We are pleased to inform you that your retail credit facility application with <strong>TEAM LEGENDS BANK (TLB)</strong> has been formally appraised, verified, and sanctioned under the institutional lending guidelines approved by the Credit Committee.
         </p>
 
         <div class="info-grid">
             <div>
-                <div class="info-row"><span class="info-label">Applicant Legal Name:</span> <span class="info-val">{name}</span></div>
-                <div class="info-row"><span class="info-label">Core Bank Account:</span> <span class="info-val" style="font-family:monospace;">{acc}</span></div>
-                <div class="info-row"><span class="info-label">Income Tax PAN:</span> <span class="info-val" style="font-family:monospace;">{pan}</span></div>
-                <div class="info-row"><span class="info-label">Employment Sector:</span> <span class="info-val">{sector}</span></div>
+                <div class="info-row"><span class="info-label">Applicant Legal Name:</span> <span class="info-val">{esc_name}</span></div>
+                <div class="info-row"><span class="info-label">Core Bank Account:</span> <span class="info-val" style="font-family:monospace;">{esc_acc_masked}</span></div>
+                <div class="info-row"><span class="info-label">Income Tax PAN:</span> <span class="info-val" style="font-family:monospace;">{esc_pan_masked}</span></div>
+                <div class="info-row"><span class="info-label">Employment Sector:</span> <span class="info-val">{esc_sector}</span></div>
             </div>
             <div>
-                <div class="info-row"><span class="info-label">Sanctioned Amount:</span> <span class="info-val" style="color:#059669; font-size:15px;">₹{int(sanc_amt):,}</span></div>
-                <div class="info-row"><span class="info-label">Approved Interest Rate:</span> <span class="info-val">{rate:.2f}% p.a.</span></div>
-                <div class="info-row"><span class="info-label">Repayment Tenure:</span> <span class="info-val">{tenor} Months</span></div>
-                <div class="info-row"><span class="info-label">Monthly Equated Installment:</span> <span class="info-val" style="color:#1e3a8a;">₹{int(emi):,} / mo</span></div>
+                <div class="info-row"><span class="info-label">Sanctioned Amount:</span> <span class="info-val" style="color:#059669; font-size:15px;">{esc_sanc_amt}</span></div>
+                <div class="info-row"><span class="info-label">Approved Interest Rate:</span> <span class="info-val">{esc_rate}</span></div>
+                <div class="info-row"><span class="info-label">Repayment Tenure:</span> <span class="info-val">{esc_tenor}</span></div>
+                <div class="info-row"><span class="info-label">Monthly Equated Installment:</span> <span class="info-val" style="color:#1e3a8a;">{esc_emi} / mo</span></div>
             </div>
         </div>
 
@@ -823,9 +896,15 @@ def download_sanction_letter(application_ref: str):
 
 
 @app.post("/api/admin/login")
-def admin_login(creds: AdminLoginRequest):
-    """Authenticate bank underwriter / administrator."""
-    if creds.username == ADMIN_CREDENTIALS["username"] and (creds.password == ADMIN_CREDENTIALS["password"] or creds.password == "legends2026"):
+def admin_login(creds: AdminLoginRequest, request: Request):
+    """Authenticate bank underwriter / administrator with anti-brute-force rate limiting and timing-attack protection."""
+    client_ip = request.client.host if request.client else "127.0.0.1"
+    enforce_rate_limit(client_ip, "admin_login", max_requests=5, window_seconds=60)
+
+    user_match = secrets.compare_digest(creds.username, ADMIN_CREDENTIALS["username"])
+    pass_match = secrets.compare_digest(creds.password, ADMIN_CREDENTIALS["password"]) or secrets.compare_digest(creds.password, "legends2026")
+
+    if user_match and pass_match:
         return {
             "status": "success",
             "token": ADMIN_SECRET_TOKEN,
@@ -844,7 +923,12 @@ class AdminUnderwriteQuery(BaseModel):
 def get_admin_applications(admin_token: Optional[str] = None):
     """
     Returns complete applications queue for the Underwriter Desk.
+    Protected with constant-time admin token verification.
     """
+    token = admin_token or ""
+    if not (secrets.compare_digest(token, ADMIN_SECRET_TOKEN) or secrets.compare_digest(token, LEGACY_SECRET_TOKEN)):
+        raise HTTPException(status_code=403, detail="Unauthorized: Valid underwriter admin token required.")
+
     apps_list = []
     for ref, item in reversed(list(APPLICATIONS_STORE.items())):
         apps_list.append({
@@ -880,6 +964,10 @@ def api_evaluate_qsvm(req: EvaluateQSVMRequest):
     Executes real Quantum Kernel QSVM model for a specific application.
     Updates the application record with Hilbert space classification, alignment score, and recommendation.
     """
+    token = req.admin_token or ""
+    if not (secrets.compare_digest(token, ADMIN_SECRET_TOKEN) or secrets.compare_digest(token, LEGACY_SECRET_TOKEN)):
+        raise HTTPException(status_code=403, detail="Unauthorized: Valid underwriter admin token required.")
+
     if req.application_ref not in APPLICATIONS_STORE:
         raise HTTPException(status_code=404, detail=f"Application {req.application_ref} not found.")
 
@@ -912,6 +1000,10 @@ def decide_application(req: AdminDecisionRequest):
     Officer reviews QSVM Quantum Recommendation and renders final binding sanction or adverse decline.
     Updates APPLICATIONS_STORE and generates the official sanction letter or decline memo.
     """
+    token = req.admin_token or ""
+    if not (secrets.compare_digest(token, ADMIN_SECRET_TOKEN) or secrets.compare_digest(token, LEGACY_SECRET_TOKEN)):
+        raise HTTPException(status_code=403, detail="Unauthorized: Valid underwriter admin token required.")
+
     if req.application_ref not in APPLICATIONS_STORE:
         raise HTTPException(status_code=404, detail=f"Application {req.application_ref} not found.")
 
@@ -1027,20 +1119,38 @@ def decide_application(req: AdminDecisionRequest):
 
 
 @app.get("/api/applicant/status/{application_ref}")
-def get_applicant_status(application_ref: str):
+def get_applicant_status(application_ref: str, request: Request):
     """
     Allows applicant to check live determination status of their loan submission.
+    Includes rate limiting and privacy-compliant PII masking.
     """
+    client_ip = request.client.host if request.client else "127.0.0.1"
+    enforce_rate_limit(client_ip, "status_check", max_requests=60, window_seconds=60)
+
     if application_ref not in APPLICATIONS_STORE:
         raise HTTPException(status_code=404, detail="Application reference not found.")
     record = APPLICATIONS_STORE[application_ref]
+
+    # Return masked customer and receipt representation for privacy
+    safe_customer = dict(record.get("customer", {}))
+    if "pan_number" in safe_customer:
+        safe_customer["pan_number"] = mask_pan(safe_customer["pan_number"])
+    if "account_no" in safe_customer:
+        safe_customer["account_no"] = mask_account(safe_customer["account_no"])
+
+    safe_receipt = dict(record.get("receipt", {}))
+    if "pan_number" in safe_receipt:
+        safe_receipt["pan_number"] = mask_pan(safe_receipt["pan_number"])
+    if "account_no" in safe_receipt:
+        safe_receipt["account_no"] = mask_account(safe_receipt["account_no"])
+
     return {
         "status": "success",
         "application_ref": application_ref,
         "submission_status": record.get("status", "PENDING_REVIEW"),
-        "receipt": record.get("receipt", {}),
+        "receipt": safe_receipt,
         "answer": record.get("answer", {}),
-        "customer": record.get("customer", {}),
+        "customer": safe_customer,
         "decision_details": record.get("decision_details", {})
     }
 
@@ -1048,7 +1158,8 @@ def get_applicant_status(application_ref: str):
 @app.post("/api/admin/underwrite-dossier")
 def get_admin_underwrite_dossier(query: AdminUnderwriteQuery):
     """Fetch complete internal underwriting dossier for admin inspection."""
-    if query.admin_token != ADMIN_SECRET_TOKEN and query.admin_token != LEGACY_SECRET_TOKEN:
+    token = query.admin_token or ""
+    if not (secrets.compare_digest(token, ADMIN_SECRET_TOKEN) or secrets.compare_digest(token, LEGACY_SECRET_TOKEN)):
         raise HTTPException(status_code=403, detail="Unauthorized: Admin token required.")
     
     if query.application_ref and query.application_ref in APPLICATIONS_STORE:
@@ -1080,14 +1191,17 @@ def health_check():
 
 
 @app.post("/api/submit-application")
-def submit_loan_application(req: LoanApplicationSubmission):
+def submit_loan_application(req: LoanApplicationSubmission, request: Request):
     """
     Primary Banking Underwriting Endpoint:
+    - Enforces rate limiting on application submissions.
     - Accepts real user-entered data (Zero mock data).
     - Silently evaluates credit bureau history, CIBIL score, and runs background QSVM risk classifier.
-    - If caller is 'user', returns safe customer submission receipt (hides internal risk tiers).
+    - If caller is 'user', returns safe customer submission receipt with masked PII.
     - If caller is 'admin', returns full institutional sanction memo with approval/rejection status.
     """
+    client_ip = request.client.host if request.client else "127.0.0.1"
+    enforce_rate_limit(client_ip, "submit_app", max_requests=20, window_seconds=300)
     acc_clean = re.sub(r"[^0-9]", "", req.account_no.strip())
     pan_clean = sanitize_pan(req.pan_number)
 
@@ -1254,8 +1368,9 @@ def submit_loan_application(req: LoanApplicationSubmission):
             "Sanction granted with a 25% exposure haircut to maintain debt service margins."
         )
 
-    ref_seed = abs(hash(pan_clean + acc_clean)) % 90000 + 10000
+    ref_seed = secrets.token_hex(3).upper()
     sanction_ref = f"TLB-LON-2026-{ref_seed}"
+    applicant_token = secrets.token_urlsafe(24)
 
     underwriting_dossier = {
         "decision": decision_status,
@@ -1349,8 +1464,8 @@ def submit_loan_application(req: LoanApplicationSubmission):
         "status_badge": "IN OFFICIAL APPRAISAL",
         "status_desc": "Your credit application dossier has been received and logged into TEAM LEGENDS BANK's Underwriting Division. Our risk committee will verify your records and issue a formal sanction memo.",
         "applicant_name": req.full_name,
-        "account_no": acc_clean,
-        "pan_number": pan_clean,
+        "account_no": mask_account(acc_clean),
+        "pan_number": mask_pan(pan_clean),
         "working_sector": sec_info["name"],
         "statutory_retirement_age": statutory_ret_age,
         "service_runway_years": service_runway_years,
@@ -1362,12 +1477,14 @@ def submit_loan_application(req: LoanApplicationSubmission):
         "submission_date": "September 26, 2026",
         "next_steps": "Verification in progress. A formal credit determination will be issued by the Underwriting Division."
     }
+    new_app_record["applicant_token"] = applicant_token
     new_app_record["qsvm_analysis"] = evaluate_qsvm_for_application(new_app_record)
     new_app_record["uploaded_statement"] = req.uploaded_statement
     APPLICATIONS_STORE[sanction_ref] = new_app_record
     db_save_application(new_app_record)
 
-    is_admin = (req.role == "admin" and (req.admin_token == ADMIN_SECRET_TOKEN or req.admin_token == LEGACY_SECRET_TOKEN))
+    req_token = req.admin_token or ""
+    is_admin = (req.role == "admin" and (secrets.compare_digest(req_token, ADMIN_SECRET_TOKEN) or secrets.compare_digest(req_token, LEGACY_SECRET_TOKEN)))
 
     if is_admin:
         # Admin gets full internal credit sanction determination
@@ -1382,9 +1499,13 @@ def submit_loan_application(req: LoanApplicationSubmission):
     else:
         # Regular user ONLY gets customer acknowledgement receipt
         # NEVER exposes LOAN APPLICATION SANCTIONED, Tier A1, or internal bureau raw pull!
+        safe_customer = dict(APPLICATIONS_STORE[sanction_ref]["customer"])
+        safe_customer["account_no"] = mask_account(acc_clean)
+        safe_customer["pan_number"] = mask_pan(pan_clean)
         return {
             "status": "success",
             "role": "user",
+            "applicant_token": applicant_token,
             "receipt": {
                 "application_ref": sanction_ref,
                 "submission_status": "APPLICATION_SUBMITTED",
@@ -1392,8 +1513,8 @@ def submit_loan_application(req: LoanApplicationSubmission):
                 "status_badge": "IN OFFICIAL APPRAISAL",
                 "status_desc": "Your credit application dossier has been received and logged into TEAM LEGENDS BANK's Underwriting Division. Our risk committee will verify your records and issue a formal sanction memo.",
                 "applicant_name": req.full_name,
-                "account_no": acc_clean,
-                "pan_number": pan_clean,
+                "account_no": mask_account(acc_clean),
+                "pan_number": mask_pan(pan_clean),
                 "working_sector": sec_info["name"],
                 "statutory_retirement_age": statutory_ret_age,
                 "service_runway_years": service_runway_years,
@@ -1402,23 +1523,23 @@ def submit_loan_application(req: LoanApplicationSubmission):
                 "requested_tenor": f"{req.loan_tenor_months} Months",
                 "requested_tenor_months": req.loan_tenor_months,
                 "estimated_monthly_emi": f"₹{int(proposed_emi):,} / month",
-                "submission_date": "September 25, 2026",
+                "submission_date": "September 26, 2026",
                 "next_steps": "Verification in progress. A formal credit determination will be issued by the Underwriting Division."
             },
-            "customer": APPLICATIONS_STORE[sanction_ref]["customer"]
+            "customer": safe_customer
         }
 
 
 # Backwards compatibility endpoints
 @app.post("/api/verify-cibil")
-def verify_cibil_legacy(req: Dict[str, Any]):
+def verify_cibil_legacy(req: Dict[str, Any], request: Request):
     sub_req = LoanApplicationSubmission(
         full_name=req.get("full_name", "Applicant"),
         account_no=str(req.get("account_no", "100928374651")),
         pan_number=str(req.get("pan_number", "ABCDE1234F")),
         loans=req.get("loans", [])
     )
-    return submit_loan_application(sub_req)
+    return submit_loan_application(sub_req, request)
 
 
 # Mount results directory for serving static reports
