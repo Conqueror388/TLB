@@ -36,6 +36,72 @@ async function apiFetch(url, options = {}) {
 }
 
 /* --------------------------------------------------------------------------
+   Product-Specific Lending Benchmarks & Pricing (% p.a.)
+   -------------------------------------------------------------------------- */
+const LOAN_PRODUCT_BENCHMARKS = {
+    "Home Improvement": {
+        name: "Home Renovation & Mortgage Loan",
+        category: "Home Loan",
+        baseRate: 8.40,
+        tag: "HOME LOAN BENCHMARK: 8.40% P.A.",
+        sub: "Monthly payment at 8.40% prime home loan rate"
+    },
+    "Vehicle Purchase": {
+        name: "Auto & Vehicle Loan",
+        category: "Auto Loan",
+        baseRate: 8.85,
+        tag: "AUTO LOAN BENCHMARK: 8.85% P.A.",
+        sub: "Monthly payment at 8.85% vehicle finance rate"
+    },
+    "Higher Education": {
+        name: "Higher Education Loan",
+        category: "Education Loan",
+        baseRate: 9.30,
+        tag: "EDUCATION BENCHMARK: 9.30% P.A.",
+        sub: "Monthly payment at 9.30% student finance rate"
+    },
+    "Personal Expenses": {
+        name: "Personal Unsecured Credit",
+        category: "Personal Loan",
+        baseRate: 10.75,
+        tag: "PERSONAL LOAN BENCHMARK: 10.75% P.A.",
+        sub: "Monthly payment at 10.75% personal credit rate"
+    },
+    "Personal / General Purpose": {
+        name: "Personal & General Purpose Loan",
+        category: "Personal Loan",
+        baseRate: 10.75,
+        tag: "PERSONAL LOAN BENCHMARK: 10.75% P.A.",
+        sub: "Monthly payment at 10.75% personal credit rate"
+    },
+    "Debt Consolidation": {
+        name: "Debt Restructuring & Consolidation",
+        category: "Consolidation Loan",
+        baseRate: 11.50,
+        tag: "CONSOLIDATION BENCHMARK: 11.50% P.A.",
+        sub: "Monthly payment at 11.50% consolidation rate"
+    },
+    "Business Expansion": {
+        name: "Business Enterprise & MSME Credit",
+        category: "Business Loan",
+        baseRate: 12.75,
+        tag: "COMMERCIAL MSME BENCHMARK: 12.75% P.A.",
+        sub: "Monthly payment at 12.75% business growth rate"
+    }
+};
+
+function getSelectedLoanProduct(purposeVal) {
+    const val = (purposeVal || document.getElementById("app-purpose")?.value || "Personal / General Purpose").trim();
+    if (LOAN_PRODUCT_BENCHMARKS[val]) return LOAN_PRODUCT_BENCHMARKS[val];
+    for (const k in LOAN_PRODUCT_BENCHMARKS) {
+        if (val.toLowerCase().includes(k.toLowerCase()) || k.toLowerCase().includes(val.toLowerCase())) {
+            return LOAN_PRODUCT_BENCHMARKS[k];
+        }
+    }
+    return LOAN_PRODUCT_BENCHMARKS["Personal / General Purpose"];
+}
+
+/* --------------------------------------------------------------------------
    Dynamic Multi-Language Strings for Live Calculations & Statuses
    -------------------------------------------------------------------------- */
 const DYNAMIC_I18N = {
@@ -982,8 +1048,10 @@ function displayAdminApplicationDossier(app) {
     const rejectReasonSelect = document.getElementById("admin-input-reject-reason");
     const rejectRemarksInput = document.getElementById("admin-input-reject-remarks");
 
+    const appPurpose = app.loan_request?.loan_purpose || app.answer?.loan_purpose || "";
+    const appProd = getSelectedLoanProduct(appPurpose);
     if (sancAmountInput) sancAmountInput.value = decision.sanctioned_amount || principal;
-    if (rateInput) rateInput.value = decision.approved_rate || 8.85;
+    if (rateInput) rateInput.value = decision.approved_rate || appProd.baseRate;
     if (tenorInput) tenorInput.value = decision.approved_tenor_months || tenorMos;
     if (remarksInput) {
         remarksInput.value = decision.officer_remarks || (qsvm.recommendation_summary || "Facility sanctioned based on Tier A Prime credit appraisal.");
@@ -1983,7 +2051,8 @@ function initUnderstandableWorkings() {
         const retAge = sectorInfo.retAge;
         const d = getActiveDyn();
 
-        const annualRate = 8.50;
+        const product = getSelectedLoanProduct();
+        const annualRate = product.baseRate;
         const r = (annualRate / 12.0) / 100.0;
         let emi = 0;
         if (r > 0 && tenorMonths > 0) {
@@ -2004,7 +2073,11 @@ function initUnderstandableWorkings() {
         const dispTotal = document.getElementById("working-disp-total");
         const dispAfford = document.getElementById("working-disp-affordability");
         const dispRunwayCheck = document.getElementById("working-disp-runway-check");
+        const dispRateTag = document.getElementById("working-disp-rate-tag");
+        const dispRateSub = document.getElementById("working-disp-rate-sub");
 
+        if (dispRateTag) dispRateTag.textContent = product.tag;
+        if (dispRateSub) dispRateSub.textContent = product.sub;
         if (dispAmount) dispAmount.textContent = formatINR(principal);
         if (dispEmi) dispEmi.textContent = `${formatINR(emi)} ${d.mo_unit}`;
         if (dispInterest) dispInterest.textContent = formatINR(totalInterest);
@@ -2129,12 +2202,20 @@ function initModernOptionSelectors() {
     // 2. Repayment Tenure Chips
     const tenorChips = document.querySelectorAll("#tenor-options .tenor-chip");
     const tenorInput = document.getElementById("app-tenor");
+    if (tenorInput) {
+        tenorInput.addEventListener("change", () => {
+            if (window.updateLoanWorking) window.updateLoanWorking();
+        });
+    }
     tenorChips.forEach((chip) => {
         chip.addEventListener("click", () => {
             tenorChips.forEach((c) => c.classList.remove("active"));
             chip.classList.add("active");
             if (tenorInput) {
                 tenorInput.value = chip.dataset.val;
+            }
+            if (window.updateLoanWorking) {
+                window.updateLoanWorking();
             }
         });
     });
@@ -2148,6 +2229,9 @@ function initModernOptionSelectors() {
             btn.classList.add("active");
             if (purposeInput) {
                 purposeInput.value = btn.dataset.val;
+            }
+            if (window.updateLoanWorking) {
+                window.updateLoanWorking();
             }
         });
     });

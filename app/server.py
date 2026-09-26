@@ -221,6 +221,100 @@ SECTOR_RETIREMENT_RULES = {
     }
 }
 
+# -----------------------------------------------------------------------------
+# Product-Specific Benchmark Lending Rates (% p.a.)
+# Institutional pricing based on collateral, facility category, and credit risk
+# -----------------------------------------------------------------------------
+LOAN_PRODUCT_BENCHMARKS = {
+    "Home Improvement": {
+        "name": "Home Renovation & Mortgage Loan",
+        "category": "Home Loan",
+        "base_rate": 8.40,
+        "spread_subprime": 2.75,
+        "spread_nearprime": 1.25,
+        "tag": "HOME LOAN BENCHMARK: 8.40% P.A.",
+        "description": "Secured residential real estate facility"
+    },
+    "Vehicle Purchase": {
+        "name": "Vehicle / Auto Purchase Loan",
+        "category": "Auto Loan",
+        "base_rate": 8.85,
+        "spread_subprime": 2.75,
+        "spread_nearprime": 1.25,
+        "tag": "AUTO LOAN BENCHMARK: 8.85% P.A.",
+        "description": "Secured hypothecated vehicle asset finance"
+    },
+    "Higher Education": {
+        "name": "Higher Education Loan",
+        "category": "Education Loan",
+        "base_rate": 9.30,
+        "spread_subprime": 2.50,
+        "spread_nearprime": 1.20,
+        "tag": "EDUCATION BENCHMARK: 9.30% P.A.",
+        "description": "Priority sector academic finance facility"
+    },
+    "Personal Expenses": {
+        "name": "Personal Unsecured Credit",
+        "category": "Personal Loan",
+        "base_rate": 10.75,
+        "spread_subprime": 3.25,
+        "spread_nearprime": 1.50,
+        "tag": "PERSONAL LOAN BENCHMARK: 10.75% P.A.",
+        "description": "Clean retail revolving personal loan"
+    },
+    "Personal / General Purpose": {
+        "name": "Personal & General Purpose Loan",
+        "category": "Personal Loan",
+        "base_rate": 10.75,
+        "spread_subprime": 3.25,
+        "spread_nearprime": 1.50,
+        "tag": "PERSONAL LOAN BENCHMARK: 10.75% P.A.",
+        "description": "Clean retail general purpose facility"
+    },
+    "Debt Consolidation": {
+        "name": "Debt Restructuring & Consolidation",
+        "category": "Consolidation Loan",
+        "base_rate": 11.50,
+        "spread_subprime": 3.25,
+        "spread_nearprime": 1.50,
+        "tag": "CONSOLIDATION BENCHMARK: 11.50% P.A.",
+        "description": "Balance transfer & facility consolidation"
+    },
+    "Business Expansion": {
+        "name": "Business Enterprise & MSME Credit",
+        "category": "Business Loan",
+        "base_rate": 12.75,
+        "spread_subprime": 3.50,
+        "spread_nearprime": 1.75,
+        "tag": "COMMERCIAL MSME BENCHMARK: 12.75% P.A.",
+        "description": "Commercial enterprise working capital & expansion"
+    }
+}
+
+def get_product_interest_rate(purpose: str, cibil_score: int = 750) -> tuple:
+    """
+    Returns (applied_rate, base_rate, product_name) based on specific loan type and credit bureau score.
+    """
+    purp_clean = (purpose or "").strip()
+    product = LOAN_PRODUCT_BENCHMARKS.get(purp_clean)
+    if not product:
+        for k, v in LOAN_PRODUCT_BENCHMARKS.items():
+            if k.lower() in purp_clean.lower() or purp_clean.lower() in k.lower():
+                product = v
+                break
+    if not product:
+        product = LOAN_PRODUCT_BENCHMARKS["Personal / General Purpose"]
+
+    base_rate = float(product["base_rate"])
+    if cibil_score < 700:
+        applied_rate = round(base_rate + float(product["spread_subprime"]), 2)
+    elif cibil_score < 750:
+        applied_rate = round(base_rate + float(product["spread_nearprime"]), 2)
+    else:
+        applied_rate = base_rate
+
+    return applied_rate, base_rate, product["name"]
+
 
 class AdminLoginRequest(BaseModel):
     username: str = Field(..., description="Admin / Underwriter Username")
@@ -775,7 +869,8 @@ def download_sanction_letter(application_ref: str):
     esc_ref = html.escape(str(application_ref))
 
     sanc_amt = decision.get("sanctioned_amount") or loan_req.get("amount_requested", 500000.0)
-    rate = decision.get("approved_rate") or 8.85
+    default_rate = get_product_interest_rate(loan_req.get("loan_purpose", ""), 750)[0]
+    rate = decision.get("approved_rate") or default_rate
     tenor = decision.get("approved_tenor_months") or loan_req.get("tenor_months", 36)
     emi = decision.get("approved_emi") or calculate_monthly_emi(sanc_amt, rate, tenor)
 
@@ -1068,7 +1163,10 @@ def decide_application(req: AdminDecisionRequest):
 
     if req.decision == "APPROVED":
         sanc_amount = float(req.sanctioned_amount or app_record.get("loan_request", {}).get("amount_requested", 500000.0))
-        rate_val = float(req.approved_rate or 8.85)
+        product_purpose = app_record.get("loan_request", {}).get("loan_purpose", "")
+        product_cibil = app_record.get("portfolio", {}).get("cibil_score", 750)
+        default_rate = get_product_interest_rate(product_purpose, product_cibil)[0]
+        rate_val = float(req.approved_rate or default_rate)
         tenor_val = int(req.approved_tenor_months or app_record.get("loan_request", {}).get("tenor_months", 36))
         emi_val = calculate_monthly_emi(sanc_amount, rate_val, tenor_val)
 
@@ -1305,14 +1403,8 @@ def submit_loan_application(req: LoanApplicationSubmission, request: Request):
     if portfolio["has_npa"]:
         combined_risk = max(combined_risk, 94)
 
-    # 4. Financial Affordability & EMI Calculation
-    base_interest_rate = 8.50  # Base Prime Rate % p.a.
-    if portfolio["cibil_score"] < 700:
-        applied_rate = 11.75
-    elif portfolio["cibil_score"] < 750:
-        applied_rate = 9.85
-    else:
-        applied_rate = base_interest_rate
+    # 4. Product-Specific Financial Affordability & Dynamic EMI Calculation
+    applied_rate, base_interest_rate, product_display_name = get_product_interest_rate(req.loan_purpose, portfolio["cibil_score"])
 
     proposed_emi = calculate_monthly_emi(req.loan_amount_requested, applied_rate, req.loan_tenor_months)
     total_future_emi = portfolio["total_monthly_emi"] + proposed_emi
@@ -1384,7 +1476,7 @@ def submit_loan_application(req: LoanApplicationSubmission, request: Request):
         sanctioned_amount_num = req.loan_amount_requested
         sanctioned_amount = f"₹{int(req.loan_amount_requested):,}"
         approved_rate = f"{applied_rate:.2f}% p.a."
-        approved_rate_benchmark = "Prime Benchmark Rate"
+        approved_rate_benchmark = f"{product_display_name} Prime Rate"
         approved_emi = f"₹{int(proposed_emi):,} / month"
         underwriting_tier = "Tier A1 • Prime Borrowing Facility"
 
@@ -1410,10 +1502,10 @@ def submit_loan_application(req: LoanApplicationSubmission, request: Request):
         decision_class = "decision-review"
         sanctioned_amount_num = round(req.loan_amount_requested * 0.75, -4)
         sanctioned_amount = f"₹{int(sanctioned_amount_num):,} (Restricted Limit)"
-        applied_rate = 11.50
-        cond_emi = calculate_monthly_emi(sanctioned_amount_num, applied_rate, req.loan_tenor_months)
-        approved_rate = f"{applied_rate:.2f}% p.a."
-        approved_rate_benchmark = "Risk Adjusted Spread"
+        cond_rate = round(applied_rate + 1.50, 2)
+        cond_emi = calculate_monthly_emi(sanctioned_amount_num, cond_rate, req.loan_tenor_months)
+        approved_rate = f"{cond_rate:.2f}% p.a."
+        approved_rate_benchmark = f"{product_display_name} Risk-Adjusted Spread"
         approved_emi = f"₹{int(cond_emi):,} / month"
         underwriting_tier = "Tier B2 • Moderate Risk / Enhanced Scrutiny"
 
@@ -1505,7 +1597,7 @@ def submit_loan_application(req: LoanApplicationSubmission, request: Request):
             "decided_at": None,
             "decided_by": None,
             "sanctioned_amount": None,
-            "approved_rate": None,
+            "approved_rate": applied_rate,
             "approved_tenor_months": None,
             "approved_emi": None,
             "rejection_reason": None,
